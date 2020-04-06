@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import DAOLoader from './components/DAOLoader'
 
 function App() {
   return (
@@ -6,8 +7,9 @@ function App() {
       <header className="App-header">
         <span>Dao app installer</span>
       </header>
+      <DAOLoader />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
