@@ -1,0 +1,42 @@
+[
+  {
+    "appName": "redemptions.aragonpm.eth",
+    "appInitParams": [{
+        "isApp": true,
+        "ref": "vault.aragonpm.eth" 
+      },
+      {
+        "isApp": true,
+        "ref": "token-manager.aragonpm.eth" 
+      }
+    ],
+    "permissions": { 
+      "create": [
+        { "entity": "any", "role": "REDEEM_ROLE", "manager": "voting.aragonpm.eth" }
+      ],
+      "grant": [
+        { "entity": "this", "where": "token-manager.aragonpm.eth", "role": "BURN_ROLE", "manager": "voting.aragonpm.eth" } 
+      ]
+    }
+  },
+  {
+    "appName": "token-request.aragonpm.eth",
+    "appInitParams": [{
+      "isApp": true,
+      "ref": "token-manager.aragonpm.eth" 
+    },
+    {
+      "isApp": true,
+      "ref": "vault.aragonpm.eth" 
+    }
+  ],
+    "permissions": {
+      "create": [
+        { "entity": "voting.aragonpm.eth", "role": "FINALISE_TOKEN_REQUEST_ROLE", "manager": "voting.aragonpm.eth" }
+      ],
+      "grant": [
+        { "entity": "this", "where": "token-manager.aragonpm.eth", "role": "MINT_ROLE", "manager": "voting.aragonpm.eth" }
+      ]
+    }
+  }
+]
