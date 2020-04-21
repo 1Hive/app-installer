@@ -5,10 +5,11 @@ import {
   getTransactionPath,
 } from './toolkit'
 import { parseInitParams, parsePermissionIntents } from './utils'
+import { getNetworkType } from './lib/web3-utils'
 
 const newAppInstanceSignature = 'newAppInstance(bytes32,address,bytes,bool)'
 
-export async function installApps(daoAddress, daoApps, selectedApps) {
+export async function installApps(daoAddress, daoApps, selectedApps, provider) {
   let scriptExecutor
   console.log('calling install with', daoAddress, daoApps, selectedApps)
 
@@ -25,8 +26,6 @@ export async function installApps(daoAddress, daoApps, selectedApps) {
 
       const appInitArgs = parseInitParams(daoApps, appInitParams)
 
-      console.log('appInitArgs', appInitArgs)
-
       const initPayload = await encodeActCall(appInit.sig, [
         ...appInitArgs,
         ['0x0000000000000000000000000000000000000000'],
@@ -39,19 +38,24 @@ export async function installApps(daoAddress, daoApps, selectedApps) {
         installParams,
       ]
 
-      const path = await getTransactionPath(daoAddress, ...installAppIntent)
+      const path = await getTransactionPath(
+        daoAddress,
+        ...installAppIntent,
+        getNetworkType(),
+        provider
+      )
 
       scriptExecutor =
         path.length === 1 ? path[0].from : path[path.length - 2].to
-
-      console.log('scriptExectur', scriptExecutor)
 
       const proxyAddress = await getCounterfactualAppAddress(
         daoAddress,
         appId,
         contractAddress,
         initPayload,
-        scriptExecutor
+        scriptExecutor,
+        getNetworkType(),
+        provider
       )
 
       const permissionIntents = parsePermissionIntents(
@@ -62,9 +66,17 @@ export async function installApps(daoAddress, daoApps, selectedApps) {
       )
 
       const intentBasket = [installAppIntent, ...permissionIntents]
-      console.log('intentBasket', intentBasket)
 
-      await execAppMethods(daoAddress, intentBasket)
+      const { transaction } = await execAppMethods(
+        daoAddress,
+        intentBasket,
+        getNetworkType(),
+        provider
+      )
+
+      console.log('got tx', transaction)
+      const { to, data } = transaction
+      await provider.getSigner().sendTransaction({ to, data })
     }
   } catch (err) {
     console.error(err)

@@ -1,15 +1,24 @@
 import React from 'react'
 import { DataView, GU } from '@aragon/ui'
-import styled from 'styled-components'
-import AppCard from './AppCard'
+import { useInstallerState } from '../../providers/InstallerProvider'
+import Navigation from '../Screens/Navigation'
 
-function AppList({ apps, mode, onAppSelected, selectable = false, selected }) {
+function DaoApps() {
+  const { daoApps } = useInstallerState()
+
   return (
     <div>
-      {mode === 'table' ? (
-        apps.length > 0 && (
+      <div
+        css={`
+          margin-bottom: ${3 * GU}px;
+        `}
+      >
+        {daoApps.length > 0 && (
           <DataView
-            entries={apps.map(app => [{ name: app.name, icon: app.iconSrc }])}
+            entries={daoApps.map(app => [
+              { name: app.name, icon: app.iconSrc },
+            ])}
+            entriesPerPage={5}
             fields={['Installed apps']}
             mode="table"
             renderEntry={([app]) => [
@@ -34,29 +43,11 @@ function AppList({ apps, mode, onAppSelected, selectable = false, selected }) {
             ]}
             tableRowHeight={6 * GU}
           />
-        )
-      ) : (
-        <Container>
-          {apps.map((app, index) => (
-            <AppCard
-              key={index}
-              app={app}
-              onAppSelected={onAppSelected}
-              selectable={selectable}
-              selected={selected?.some(elem => elem === app.name)}
-            />
-          ))}
-        </Container>
-      )}
+        )}
+      </div>
+      <Navigation />
     </div>
   )
 }
 
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: ${21 * GU}px;
-  grid-gap: ${2 * GU}px;
-`
-
-export default AppList
+export default DaoApps

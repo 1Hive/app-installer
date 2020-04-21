@@ -2,26 +2,33 @@ import { useEffect, useMemo, useState } from 'react'
 import { getApmRepo } from '../toolkit'
 import apps from '../config/apps.json'
 import { getIPFSPath } from '../utils'
-import environment from '../environment'
+import { getNetworkType } from '../lib/web3-utils'
+import { useWallet } from '../providers/Wallet'
 
-function useAvailableRepos() {
+// Hook for fetching apps available for installation apm repos (see apps.json)
+function useAppRepos() {
   const [repos, setRepos] = useState([])
-  const [loading, setLoading] = useState(false)
+
+  const { ethers } = useWallet()
 
   useEffect(() => {
     let cancelled = false
 
     const fetchRepos = async () => {
-      if (apps.length === 0) {
+      if (!ethers || apps.length === 0) {
         return
       }
 
-      setLoading(true)
       const tempRepos = []
       try {
         for (let index = 0; index < apps.length; index++) {
           const app = apps[index]
-          const repo = await getApmRepo(app.appName, 'latest', environment)
+          const repo = await getApmRepo(
+            app.appName,
+            'latest',
+            getNetworkType(),
+            ethers
+          )
           tempRepos.push({ ...repo, ...app })
         }
 
@@ -29,10 +36,7 @@ function useAvailableRepos() {
           setRepos(tempRepos)
         }
       } catch (err) {
-        console.error('Error fetching repos')
-      }
-      if (!cancelled) {
-        setLoading(false)
+        console.error('Error fetching repos', err)
       }
     }
 
@@ -41,7 +45,7 @@ function useAvailableRepos() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [ethers])
 
   const processedRepos = useMemo(() => {
     return repos.map(({ contentUri, icons, ...repo }) => {
@@ -52,7 +56,7 @@ function useAvailableRepos() {
     })
   }, [repos])
 
-  return [processedRepos, loading]
+  return processedRepos
 }
 
-export default useAvailableRepos
+export default useAppRepos
