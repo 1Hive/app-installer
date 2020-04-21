@@ -16,8 +16,6 @@ import {
 import { AragonManifest, AragonArtifact } from '../types'
 import { defaultIpfsGateway } from '../params'
 import { isAddress } from 'web3-utils'
-import Web3 from 'web3'
-import { Web3Provider } from 'ethers/providers'
 
 /**
  * Internal logic shared with single and all version fetchers
@@ -38,7 +36,7 @@ async function _getRepoVersion(
 }
 
 export function Repo(
-  provider: Web3Provider,
+  provider: ethers.providers.Provider,
   optionsGlobal?: { ipfsGateway?: string }
 ) {
   /**
@@ -50,6 +48,7 @@ export function Repo(
     const addressOrFullEnsName = isAddress(appId)
       ? appId
       : getDefaultApmName(appId)
+
     return new ethers.Contract(
       addressOrFullEnsName,
       repoAbi,
@@ -69,6 +68,7 @@ export function Repo(
       version: 'latest' | string | number = 'latest'
     ): Promise<ApmVersion> {
       const repo = _getApmRepoInstance(appId)
+
       return _getRepoVersion(repo, version)
     },
 
@@ -91,6 +91,7 @@ export function Repo(
         (options || {}).ipfsGateway ||
         (optionsGlobal || {}).ipfsGateway ||
         defaultIpfsGateway
+
       const url = getFetchUrlFromContentUri(contentUri, { ipfsGateway })
 
       const [manifest, artifact] = await Promise.all([

@@ -1,7 +1,6 @@
+import ethers from 'ethers'
 import { getTransactionPath } from './acl/getTransactionPath'
 import { useEnvironment } from '../helpers/useEnvironment'
-import { TransactionReceipt } from 'web3-core'
-import { TransactionRevertInstructionError } from 'web3-core-helpers'
 
 /**
  * Execute a method on a DAO's app.
@@ -20,17 +19,16 @@ export async function execAppMethod(
   method: string,
   params: any[],
   progressHandler: (progressId: number) => void | undefined,
-  environment: string
+  environment: string,
+  provider: ethers.providers.Web3Provider
 ): Promise<{
   transactionPath: string
-  receipt: TransactionReceipt | TransactionRevertInstructionError
 }> {
-  const { web3 } = useEnvironment(environment)
 
   if (progressHandler) progressHandler(1)
 
   const transactionPath = (
-    await getTransactionPath(dao, app, method, params, environment)
+    await getTransactionPath(dao, app, method, params, environment, provider)
   )[0]
 
   if (!transactionPath)
@@ -39,7 +37,6 @@ export async function execAppMethod(
   if (progressHandler) progressHandler(2)
 
   return {
-    transactionPath,
-    receipt: await web3.eth.sendTransaction(transactionPath),
+    transactionPath
   }
 }

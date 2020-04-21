@@ -1,5 +1,4 @@
 import { AragonEnvironments } from '../types'
-
 import defaultEnvironmentsSrc from './environments.default.json'
 
 // JSON files are imported in this unique file until Typescript x JSON import issues are fixed
@@ -9,4 +8,4 @@ import defaultEnvironmentsSrc from './environments.default.json'
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 export const defaultEnvironments: AragonEnvironments = defaultEnvironmentsSrc
-export const defaultNetworks = require('@aragon/truffle-config-v5')
+export const defaultNetworks = {networks:{}}

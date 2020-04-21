@@ -1,10 +1,11 @@
 import { isAddress } from 'web3-utils'
 import { useEnvironment } from '../helpers/useEnvironment'
 import { convertDAOIdToSubdomain } from './aragonId'
+import { ethers } from 'ethers'
 // Note: Must use require because 'ethereum-ens' is an untyped library
 // without type definitions or @types/ethereum-ens
 /* eslint-disable @typescript-eslint/no-var-requires */
-const ENS = require('ethereum-ens')
+const ENS = require('ethjs-ens')
 
 /**
  * Resolve an ens domain
@@ -15,12 +16,13 @@ const ENS = require('ethereum-ens')
  */
 export async function resolveEnsDomain(
   domain: string,
-  environment: string
+  environment: string,
+  provider?: ethers.providers.Provider
 ): Promise<string> {
   try {
-    const { web3, apmOptions } = useEnvironment(environment)
+    const { apmOptions } = useEnvironment(environment)
 
-    const ens = new ENS(web3.currentProvider, apmOptions.ensRegistryAddress)
+    const ens = new ENS({ provider, registryAddress: apmOptions.ensRegistryAddress })
 
     return ens.resolver(domain).addr()
   } catch (err) {

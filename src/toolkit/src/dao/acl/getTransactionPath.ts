@@ -1,5 +1,5 @@
 import { takeWhile, map, filter, first, defaultIfEmpty } from 'rxjs/operators'
-//
+import ethers from 'ethers'
 import { initWrapper } from '../utils/wrapper'
 import { addressesEqual } from '../../utils/addresses'
 import { AragonApp } from '../../types'
@@ -24,25 +24,24 @@ export async function getTransactionPath(
   appAddress: string,
   method: string,
   params: any[],
-  environment: string
+  environment: string,
+  provider: ethers.providers.Web3Provider
 ): Promise<TransactionPath> {
-  const wrapper = await initWrapper(dao, environment)
+
+  const wrapper = await initWrapper(dao, environment, provider)
 
   // Wait for app info to load
-  const app = await wrapper.apps
+  const apps = await wrapper.apps
     .pipe(
       // If the app list contains a single app, wait for more
-      takeWhile((apps: AragonApp[]) => apps.length <= 1, true),
-      map((apps: AragonApp[]) =>
-        apps.find(app => addressesEqual(appAddress, app.proxyAddress))
-      ),
-      filter((app: AragonApp | undefined) => Boolean(app)),
-      defaultIfEmpty(null), // If app is not found, default to null
+      filter((apps: AragonApp[]) => apps.length > 1),
       first()
     )
     .toPromise()
 
-  if (!app) throw new Error(`Can't find app ${appAddress}.`)
+if (!apps.some((app: AragonApp) => addressesEqual(appAddress, app.proxyAddress))) {
+  throw new Error(`Can't find app ${appAddress}.`)
+}
 
   // If app is the ACL, call getACLTransactionPath
   return appAddress === wrapper.aclProxy.address

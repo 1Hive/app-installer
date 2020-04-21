@@ -1,5 +1,4 @@
 export * from './addresses'
-export * from './appValidation'
 export * from './aragonId'
 export * from './defaultApm'
 export * from './encodeActCall'

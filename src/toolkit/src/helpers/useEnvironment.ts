@@ -1,28 +1,20 @@
-import Web3 from 'web3'
 const url =  require('url')
-import { ethers } from 'ethers'
-//
-import { defaultEnvironments, defaultNetworks } from '../config'
+
+import { defaultEnvironments } from '../config'
 import { loadArappFile } from './loadConfigFiles'
 import {
   DEFAULT_GAS_PRICE,
-  FRAME_ENDPOINT,
-  FRAME_ORIGIN,
-  ARAGON_RINKEBY_ENDPOINT,
-  ARAGON_MAINNET_ENDPOINT,
   IPFS_RPC,
   IPFS_LOCAL_GATEWAY,
   IPFS_ARAGON_GATEWAY,
   DEVCHAIN_ENS,
 } from './constants'
 import { AragonAppJson, AragonEnvironment } from '../types'
-import { WebsocketProvider, HttpProvider } from 'web3-core'
+import { Web3Provider } from 'ethers/providers'
 
 export class NoEnvironmentInArapp extends Error {}
 export class NoEnvironmentInDefaults extends Error {}
 export class NoNetworkInTruffleConfig extends Error {}
-
-const frameHeaders: { [key: string]: string } = { origin: FRAME_ORIGIN }
 
 function getEnvironment(
   envName: string,
@@ -92,121 +84,25 @@ function configureApm(
   }
 }
 
-function configureProvider(
-  network: string,
-  truffleNetwork: {
-    provider: any
-    host: string
-    port: number
-  },
-  useFrame: boolean
-): any | WebsocketProvider | HttpProvider {
-  if (useFrame) {
-    return new Web3.providers.WebsocketProvider(
-      FRAME_ENDPOINT,
-      { headers: { origin: FRAME_ORIGIN } } // Provider options
-    )
-  }
-
-  if (!truffleNetwork) {
-    throw new NoNetworkInTruffleConfig(network)
-  }
-
-  const { provider, host, port } = truffleNetwork
-
-  if (provider) {
-    if (typeof provider === 'function') return provider()
-    else return provider
-  } else if (host && port) {
-    return new Web3.providers.WebsocketProvider(`ws://${host}:${port}`)
-  } else {
-    return new Web3.providers.HttpProvider('http://localhost:8545')
-  }
-}
-
-function configureEthersProvider({
-  host,
-  port,
-  useFrame,
-  ensAddress,
-}: {
-  host: string
-  port: number
-  useFrame: boolean
-  ensAddress?: string
-}): ethers.providers.Provider {
-  const connectionOptions = {
-    url: useFrame
-      ? FRAME_ENDPOINT
-      : host && port
-      ? `http://${host}:${port}`
-      : 'http://localhost:8545',
-    headers: useFrame ? frameHeaders : undefined,
-  }
-  const networkOptions = ensAddress
-    ? { name: '', chainId: 0, ensAddress }
-    : undefined
-  return new ethers.providers.JsonRpcProvider(connectionOptions, networkOptions)
-}
-
-// TODO: Fetch api
-// const configureGasPrice = () => {}
-
-// let previousEnvironment
-// TODO: Add config environment function
-
 interface UseEnvironment extends AragonEnvironment {
   apmOptions: ApmOptions
-  web3: Web3
-  wsProvider?: WebsocketProvider
-  gasPrice: string
-  provider: ethers.providers.Provider
+  gasPrice: string,
 }
 
 export function useEnvironment(env: string): UseEnvironment {
-  // try {
 
-  // Parse environment
-  const useFrame = RegExp(/frame:(.*)/).test(env)
-  env = useFrame ? env.split(/:(.+)/)[1] || env : env
 
   // Load config files
   const arapp = loadArappFile()
-  const { networks: truffleNetworks } = defaultNetworks
 
   // default environment (no arapp.json) uses different naming
   const environment = getEnvironment(env, arapp)
 
-  const { wsRPC, /* apm, */ network, registry, gasPrice } = environment
+  const { network, registry, gasPrice } = environment
 
-  console.log('network', network)
-
-  const wsProviderUrl =
-    wsRPC ||
-    (network === 'rinkeby'
-      ? ARAGON_RINKEBY_ENDPOINT
-      : network === 'mainnet'
-      ? ARAGON_MAINNET_ENDPOINT
-      : null)
-
-  // NOTE: environment.apm does NOT exist
-  // const ipfsAragonGateway =
-  //   apm && apm.ipfs.gateway // TODO: Refactor apm object
-  //     ? apm.ipfs.gateway
-  //     : network === 'rpc'
-  //     ? IPFS_LOCAL_GATEWAY
-  //     : IPFS_ARAGON_GATEWAY
   const ipfsAragonGateway =
     network === 'rpc' ? IPFS_LOCAL_GATEWAY : IPFS_ARAGON_GATEWAY
   const ensAddress = registry || DEVCHAIN_ENS
-
-  const truffleNetwork = truffleNetworks[network]
-  if (!useFrame && !truffleNetwork) {
-    throw new NoNetworkInTruffleConfig(network)
-  }
-
-  console.log('networks', truffleNetworks)
-  console.log('network', truffleNetworks)
 
   return {
     ...environment,
@@ -215,18 +111,7 @@ export function useEnvironment(env: string): UseEnvironment {
       ipfsAragonGateway,
       ensAddress
     ),
-    // Todo: Consolidate provider initialization
-    web3: new Web3(configureProvider(network, truffleNetwork, useFrame)),
-    provider: truffleNetwork.provider || configureEthersProvider({
-      host: truffleNetwork.host,
-      port: truffleNetwork.port,
-      useFrame,
-      ensAddress,
-    }),
-    wsProvider: wsProviderUrl
-      ? new Web3.providers.WebsocketProvider(wsProviderUrl)
-      : undefined,
     gasPrice:
-      gasPrice || truffleNetworks[network].gasPrice || DEFAULT_GAS_PRICE,
+      gasPrice || DEFAULT_GAS_PRICE,
   }
 }

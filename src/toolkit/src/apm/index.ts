@@ -1,6 +1,7 @@
-import { AragonApmRepoData, ApmVersion, AragonJsIntent } from './types'
+import { AragonApmRepoData } from './types'
 import { useEnvironment } from '../helpers'
 import { Repo } from './repo'
+import { ethers } from 'ethers'
 
 /**
  * Return a Repo object from aragonPM
@@ -12,12 +13,14 @@ import { Repo } from './repo'
 export async function getApmRepo(
   apmRepoName: string,
   apmRepoVersion = 'latest',
-  environment: string
+  environment: string,
+  provider: ethers.providers.Provider
 ): Promise<AragonApmRepoData> {
-  const { apmOptions, web3 } = useEnvironment(environment)
+
+  const { apmOptions } = useEnvironment(environment)
 
 
-  const repo = Repo(web3.givenProvider)
+  const repo = Repo(provider)
   return repo.getVersionContent(apmRepoName, apmRepoVersion, {
     ipfsGateway: apmOptions.ipfs.gateway,
   })

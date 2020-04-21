@@ -1,6 +1,4 @@
-import { TransactionReceipt } from 'web3-core'
-import { TransactionRevertInstructionError } from 'web3-core-helpers'
-import { useEnvironment } from '../helpers/useEnvironment'
+import ethers from 'ethers'
 import { initWrapper } from './utils/wrapper'
 
 /**
@@ -14,18 +12,15 @@ import { initWrapper } from './utils/wrapper'
 export async function execAppMethods(
   dao: string,
   intentBasket: Array<any>,
-  environment: string
+  environment: string,
+  provider: ethers.providers.Web3Provider
 ): Promise<{
   path: string
-  receipt: TransactionReceipt | TransactionRevertInstructionError
+  transaction: object
 }> {
-  const { web3 } = useEnvironment(environment)
-  const wrapper = await initWrapper(dao, environment)
+  const wrapper = await initWrapper(dao, environment, provider)
 
-
-  const transactionPath = await wrapper.getTransactionPathForIntentBasket(intentBasket)
-
-  console.log('path ofr intent basket', transactionPath)
+  const transactionPath = await wrapper.getTransactionPathForIntentBasket(intentBasket, { checkMode: 'single' })
 
   if (!transactionPath.transactions.length)
     throw new Error('Cannot find transaction path for executing action')
@@ -35,6 +30,6 @@ export async function execAppMethods(
 
   return {
     path,
-    receipt: await web3.eth.sendTransaction(transaction),
+    transaction
   }
 }

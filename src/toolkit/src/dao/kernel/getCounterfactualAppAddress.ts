@@ -1,4 +1,5 @@
 import { initWrapper } from '../utils/wrapper'
+import { ethers } from 'ethers'
 
 /**
  * Return counterfactual proxy address of a future installed app
@@ -18,8 +19,9 @@ export async function getCounterfactualAppAddress(
   encodedInitializeFunc: string,
   from: string,
   environment: string,
+  provider: ethers.providers.Web3Provider
 ): Promise<String> {
-  const wrapper = await initWrapper(dao, environment)
+  const wrapper = await initWrapper(dao, environment, provider)
 
   return await wrapper.kernelProxy.call(
     'newAppInstance',

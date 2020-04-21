@@ -10,7 +10,7 @@ export const DEFAULT_IPFS_TIMEOUT = 300000
 export const REGISTRAR_GAS_LIMIT = '1000000'
 export const DEFAULT_GAS_FUZZ_FACTOR = 1.5
 export const LAST_BLOCK_GAS_LIMIT_FACTOR = 0.95
-export const DEFAULT_GAS_PRICE = 5000000000 // 5 gwei
+export const DEFAULT_GAS_PRICE = '5000000000' // 5 gwei
 
 export const EXECUTE_FUNCTION_NAME = 'execute'
 
