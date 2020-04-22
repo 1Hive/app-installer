@@ -18,7 +18,7 @@ function RepoCardGroup({ repos, onRepoSelected, selected }) {
           key={index}
           repo={repo}
           onRepoSelected={onRepoSelected}
-          selected={selected?.some(elem => elem === repo.appName)}
+          selected={selected?.some(elem => elem.appName === repo.appName)}
         />
       ))}
     </div>

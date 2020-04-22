@@ -1,23 +1,73 @@
-import React from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { GU } from '@aragon/ui'
+import { AppConfigScreens } from './config'
 import { useInstallerState } from '../../providers/InstallerProvider'
-import Navigation from './Navigation'
-import RedemptionsScreen from './RedemptionsScreen'
-import TokenRequestScreen from './TokenRequestScreen'
-
-const screens = new Map([
-  [
-    'redemptions.aragonpm.eth',
-    { Screen: RedemptionsScreen, appLabel: 'Redemptions' },
-  ],
-  [
-    'token-request.aragonpm.eth',
-    { Screen: TokenRequestScreen, appLabel: 'Token Request' },
-  ],
-])
+import { useScroll } from '../../providers/ScrollProvider'
 
 function AppConfiguration() {
-  const { selectedAppRepos } = useInstallerState()
+  const {
+    appsConfig,
+    selectedAppRepos,
+    onBack,
+    onNext,
+    onUpdateAppsConfig,
+  } = useInstallerState()
+  const { scrollTo } = useScroll()
+
+  const [step, setStep] = useState(0)
+  // TODO: Update appsConfig data if repo unselected
+  const [screensData, setScreensData] = useState(appsConfig)
+
+  const prevRef = useRef()
+  const nextRef = useRef()
+
+  const updateScreensData = useCallback(updatedData => {
+    setScreensData(updatedData)
+  }, [])
+
+  const handlePrevStep = useCallback(() => {
+    if (step === 0) {
+      return onBack()
+    }
+
+    // Scroll to prev screen
+    if (prevRef.current) {
+      scrollTo(prevRef.current)
+    }
+
+    setStep(step => step - 1)
+  }, [onBack, scrollTo, step])
+
+  const handleNextStep = useCallback(
+    screenData => {
+      const updatedData = { ...screensData, ...screenData }
+
+      // Save screensData and go to next installer screen
+      if (step === selectedAppRepos.length - 1) {
+        onUpdateAppsConfig(updatedData)
+        return onNext()
+      }
+
+      // Scroll to next screen
+      if (nextRef.current) {
+        const { offsetTop, offsetHeight } = nextRef.current
+        scrollTo(offsetTop + offsetHeight)
+      }
+
+      // Go to next app configuration screen
+      updateScreensData(updatedData)
+      setStep(step => step + 1)
+    },
+    [
+      onNext,
+      onUpdateAppsConfig,
+      screensData,
+      scrollTo,
+      selectedAppRepos,
+      step,
+      updateScreensData,
+    ]
+  )
 
   return (
     <div>
@@ -26,13 +76,32 @@ function AppConfiguration() {
           margin-bottom: ${3 * GU}px;
         `}
       >
-        {selectedAppRepos.map((appRepo, index) => {
-          const { Screen, appLabel } = screens.get(appRepo)
+        {selectedAppRepos.map(({ iconSrc, id }, index) => {
+          const { Screen } = AppConfigScreens.get(id)
 
-          return <Screen key={index} appLabel={appLabel} />
+          //  TODO: Generalize component
+          return (
+            <Screen
+              ref={
+                index === step + 1
+                  ? nextRef
+                  : index === step - 1
+                  ? prevRef
+                  : null
+              }
+              key={index}
+              blurr={step !== index}
+              data={screensData}
+              iconSrc={iconSrc}
+              screenProps={{
+                navigate: index === step,
+                onBack: handlePrevStep,
+                onNext: handleNextStep,
+              }}
+            />
+          )
         })}
       </div>
-      <Navigation nextLabel="Install!" onNext />
     </div>
   )
 }

@@ -1,18 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, IconArrowLeft, GU, useTheme } from '@aragon/ui'
-import { useInstallerState } from '../../providers/InstallerProvider'
 
 function Navigation({
   backEnabled,
   backLabel,
   nextEnabled,
   nextLabel,
+  onBack,
+  onNext,
   showBack,
   showNext,
 }) {
   const theme = useTheme()
-  const { onBack, onNext } = useInstallerState()
 
   return (
     <div

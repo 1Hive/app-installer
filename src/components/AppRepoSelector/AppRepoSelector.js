@@ -2,10 +2,20 @@ import React from 'react'
 import { GU, Info } from '@aragon/ui'
 import RepoCardGroup from './RepoCardGroup'
 import { useInstallerState } from '../../providers/InstallerProvider'
-import Navigation from '../Screens/Navigation'
+import Navigation from '../Navigation'
+import { validateDAO } from '../../utils'
 
 function AppSelector() {
-  const { appRepos, selectedAppRepos, onSelectRepo } = useInstallerState()
+  const {
+    appRepos,
+    daoApps,
+    selectedAppRepos,
+    onBack,
+    onNext,
+    onSelectRepo,
+  } = useInstallerState()
+
+  const error = validateDAO(daoApps, selectedAppRepos)
 
   return (
     <div>
@@ -22,7 +32,21 @@ function AppSelector() {
         />
         <Info>Select the apps you would like to install</Info>
       </div>
-      <Navigation nextEnabled={Boolean(selectedAppRepos.length)} />
+      {error && (
+        <Info
+          mode="error"
+          css={`
+            margin-bottom: ${3 * GU}px;
+          `}
+        >
+          {error}
+        </Info>
+      )}
+      <Navigation
+        nextEnabled={!error && Boolean(selectedAppRepos.length)}
+        onBack={onBack}
+        onNext={onNext}
+      />
     </div>
   )
 }

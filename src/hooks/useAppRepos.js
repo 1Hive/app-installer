@@ -24,7 +24,7 @@ function useAppRepos() {
         for (let index = 0; index < apps.length; index++) {
           const app = apps[index]
           const repo = await getApmRepo(
-            app.appName,
+            app.id,
             'latest',
             getNetworkType(),
             ethers

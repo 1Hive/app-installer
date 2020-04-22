@@ -1,14 +1,25 @@
 import isIPFS from 'is-ipfs'
-
 const ANY_ENTITY = `0x${''.padEnd(40, 'f')}`
 
 export const IPFS_ENDPOINT = 'https://ipfs.eth.aragon.network/ipfs'
 
-export function parseInitParams(daoApps, appInitParams) {
-  return appInitParams.map(param => {
-    return daoApps.find(app => param.ref === app.appName).proxyAddress
-  })
+// Note that we can get inint params from both installed apps and settings screens
+export function parseInitParams(daoApps, appInitParams, settings) {
+  return appInitParams
+    .sort((p1, p2) => p1.priority < p2.priority)
+    .map(param => {
+      if (param.isApp) {
+        return daoApps.find(app => hasAppParam(app, param)).proxyAddress
+      }
+
+      return settings[param.ref]
+    })
 }
+
+const hasAppParam = (app, param) =>
+  Array.isArray(param.ref)
+    ? param.ref.includes(app.appName)
+    : param.ref === app.appName
 
 const getPermissionAddressByRef = (daoApps, ref) => {
   return ref === 'any'
@@ -62,18 +73,25 @@ export function parsePermissionIntents(
 // Validates that the DAO has the required apps installed in order to initialize the apps
 // E.g. Redemptions needs a token manager and vault
 export function validateDAO(daoApps, selectedApps) {
+  let missingApp
+
   const ok = selectedApps
     .map(app => app.appInitParams.filter(param => param.isApp))
     .flat()
     .reduce((acc, param) => {
-      return acc && daoApps.some(daoApp => param.ref === daoApp.appName)
+      const hasApp = daoApps.some(daoApp => hasAppParam(daoApp, param))
+      if (!hasApp) {
+        missingApp = param.ref
+      }
+
+      return acc && hasApp
     }, true)
 
   if (ok) {
     return null
   }
 
-  return "Seems that you don't have installed a required app"
+  return `You need to have ${missingApp} installed`
 }
 
 export const getIpfsCidFromUri = string => {

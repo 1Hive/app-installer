@@ -1,8 +1,9 @@
 import React from 'react'
-import { GU, Layout, Main, ScrollView } from '@aragon/ui'
+import { GU, Layout, Main } from '@aragon/ui'
 
 import Header from './components/Header/Header'
 import Screens from './components/Screens'
+import { ScrollProvider } from './providers/ScrollProvider'
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         `}
       >
         <Header />
-        <ScrollView>
+        <ScrollProvider>
           <Layout>
             <div
               css={`
@@ -29,7 +30,7 @@ function App() {
               </div>
             </div>
           </Layout>
-        </ScrollView>
+        </ScrollProvider>
       </div>
     </Main>
   )

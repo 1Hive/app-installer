@@ -17,8 +17,8 @@ function validationError(tokens) {
   return null
 }
 
-function useTokens() {
-  const [tokens, setTokens] = useState([EMPTY_TOKEN])
+function useTokens(data) {
+  const [tokens, setTokens] = useState(data || [EMPTY_TOKEN])
   const [error, setError] = useState(null)
 
   const handleTokenAdded = useCallback(() => {
@@ -58,14 +58,24 @@ function useTokens() {
     [tokens]
   )
 
+  const validateTokens = useCallback(() => {
+    const error = validationError(tokens)
+
+    if (error) {
+      setError(error)
+    }
+
+    return !error
+  }, [tokens])
+
   const actions = useMemo(
     () => ({
       add: handleTokenAdded,
       remove: handleTokenRemoved,
       update: handleTokenUpdated,
-      validate: validationError,
+      validate: validateTokens,
     }),
-    [handleTokenAdded, handleTokenRemoved, handleTokenUpdated]
+    [handleTokenAdded, handleTokenRemoved, handleTokenUpdated, validateTokens]
   )
 
   return [tokens, actions, error]

@@ -1,12 +1,11 @@
 import React from 'react'
 import { GU } from '@aragon/ui'
-import screens from './config'
+import { InstallerScreens } from './config'
 import { useInstallerState } from '../../providers/InstallerProvider'
 
 function Screens() {
   const { step } = useInstallerState()
-
-  const { Screen } = screens[step]
+  const { Screen } = InstallerScreens[step]
 
   return (
     <div

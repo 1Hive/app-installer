@@ -2,7 +2,7 @@ import React from 'react'
 import { Field, GU, LoadingRing, TextInput, useTheme } from '@aragon/ui'
 import { useInstallerState } from '../../providers/InstallerProvider'
 import CheckDisc from '../CheckDisk'
-import Navigation from '../Screens/Navigation'
+import Navigation from '../Navigation'
 import {
   DOMAIN_CHECK,
   DOMAIN_ERROR,
@@ -13,7 +13,12 @@ import { ARAGON_DOMAIN } from '../../lib/web3-utils'
 
 function DaoLoader() {
   const theme = useTheme()
-  const { daoDomain, domainStatus, onUpdateDaoDomain } = useInstallerState()
+  const {
+    daoDomain,
+    domainStatus,
+    onNext,
+    onUpdateDaoDomain,
+  } = useInstallerState()
 
   return (
     <div>
@@ -76,6 +81,7 @@ function DaoLoader() {
 
       <Navigation
         nextEnabled={domainStatus === DOMAIN_CHECK}
+        onNext={onNext}
         showBack={false}
       />
     </div>

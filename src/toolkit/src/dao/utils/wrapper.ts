@@ -20,7 +20,7 @@ let wrapper: any = null
 export async function initWrapper(
   dao: string,
   environment: string,
-  provider?: ethers.providers.Web3Provider,
+  provider: ethers.providers.Web3Provider,
   options?: {
     accounts?: string[]
     onApps?: (apps: any) => void
@@ -50,7 +50,8 @@ export async function initWrapper(
       apm: apmOptions,
     })
 
-    const accounts = (options && options.accounts) || []
+    const accounts = (options?.accounts) || await provider.send("eth_accounts", [])
+    console.log(accounts)
   
     try {
       await wrapper.init({ accounts: { providedAccounts: accounts } })

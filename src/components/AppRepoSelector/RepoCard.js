@@ -5,7 +5,7 @@ function RepoCard({ repo, onRepoSelected, selected = true }) {
   const theme = useTheme()
 
   const handleAppSelected = useCallback(() => {
-    onRepoSelected(repo.appName)
+    onRepoSelected(repo)
   }, [onRepoSelected, repo])
 
   return (
@@ -59,7 +59,13 @@ function RepoCard({ repo, onRepoSelected, selected = true }) {
         >
           {repo.name}
         </h2>
-        <p>{repo.description}</p>
+        <p
+          css={`
+            color: ${theme.contentSecondary};
+          `}
+        >
+          {repo.description}
+        </p>
       </div>
       <div>
         <Checkbox checked={selected} />

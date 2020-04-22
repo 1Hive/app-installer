@@ -9,12 +9,35 @@ import { getNetworkType } from './lib/web3-utils'
 
 const newAppInstanceSignature = 'newAppInstance(bytes32,address,bytes,bool)'
 
-export async function installApps(daoAddress, daoApps, selectedApps, provider) {
+async function getInitPayload(daoApps, functions, appInitParams, settings) {
+  console.log('settings', settings)
+  const appInitArgs = parseInitParams(daoApps, appInitParams, settings)
+
+  console.log('appInitArgs', appInitArgs)
+
+  const appInit = functions.find(fn => fn.abi.name === 'initialize')
+  return encodeActCall(appInit.sig, appInitArgs)
+}
+
+export async function getInstallRawTx(
+  daoAddress,
+  daoApps,
+  selectedApps,
+  appsSettings,
+  provider
+) {
   let scriptExecutor
-  console.log('calling install with', daoAddress, daoApps, selectedApps)
+  console.log(
+    'calling install with',
+    daoAddress,
+    daoApps,
+    selectedApps,
+    appsSettings
+  )
 
   try {
     for (const {
+      id,
       appId,
       appInitParams,
       contractAddress,
@@ -22,14 +45,14 @@ export async function installApps(daoAddress, daoApps, selectedApps, provider) {
       permissions,
       roles,
     } of selectedApps) {
-      const appInit = functions.find(fn => fn.abi.name === 'initialize')
-
-      const appInitArgs = parseInitParams(daoApps, appInitParams)
-
-      const initPayload = await encodeActCall(appInit.sig, [
-        ...appInitArgs,
-        ['0x0000000000000000000000000000000000000000'],
-      ])
+      const appSettings = appsSettings[id]
+      // Build install App intent
+      const initPayload = await getInitPayload(
+        daoApps,
+        functions,
+        appInitParams,
+        appSettings
+      )
 
       const installParams = [appId, contractAddress, initPayload, false]
       const installAppIntent = [
@@ -38,6 +61,7 @@ export async function installApps(daoAddress, daoApps, selectedApps, provider) {
         installParams,
       ]
 
+      // Look for a transaction path for the connected account
       const path = await getTransactionPath(
         daoAddress,
         ...installAppIntent,
@@ -45,9 +69,14 @@ export async function installApps(daoAddress, daoApps, selectedApps, provider) {
         provider
       )
 
+      if (!path.length) {
+        throw new Error('Could not find tx path for given address')
+      }
+
       scriptExecutor =
         path.length === 1 ? path[0].from : path[path.length - 2].to
 
+      // Get conterfatual proxy address for app
       const proxyAddress = await getCounterfactualAppAddress(
         daoAddress,
         appId,
@@ -74,20 +103,12 @@ export async function installApps(daoAddress, daoApps, selectedApps, provider) {
         provider
       )
 
-      console.log('got tx', transaction)
       const { to, data } = transaction
-      await provider.getSigner().sendTransaction({ to, data })
+
+      return { to, data }
     }
   } catch (err) {
     console.error(err)
+    throw err
   }
 }
-
-// calldatum.push(
-//   await encodeActCall(newAppInstanceSignature, [
-//     appId,
-//     contractAddress,
-//     initPayload,
-//     false,
-//   ])
-// )
