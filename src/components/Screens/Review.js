@@ -9,7 +9,8 @@ function ReviewScreen() {
   const {
     appsConfig,
     onBack,
-    onInstall,
+    onNext,
+    onUpdateAppsConfig,
     selectedAppRepos,
   } = useInstallerState()
 
@@ -24,8 +25,9 @@ function ReviewScreen() {
       }
     }, {})
 
-    onInstall(processedSettings)
-  }, [appsConfig, onInstall, selectedAppRepos])
+    onUpdateAppsConfig(processedSettings)
+    onNext()
+  }, [appsConfig, onNext, onUpdateAppsConfig, selectedAppRepos])
 
   const items = useMemo(
     () =>

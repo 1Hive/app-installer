@@ -5,6 +5,7 @@ import AppConfiguration from './AppConfiguration'
 import AppSelector from '../AppRepoSelector/AppRepoSelector'
 import DaoApps from '../Dao/DaoApps'
 import DaoLoader from '../Dao/DaoLoader'
+import Install from '../Installer/Install'
 import ReviewScreen from './Review'
 import RedemptionsScreen from './RedemptionsScreen'
 import TokenRequestScreen from './TokenRequestScreen'
@@ -16,6 +17,7 @@ export const InstallerScreens = [
   { Screen: AppSelector },
   { Screen: AppConfiguration },
   { Screen: ReviewScreen },
+  { Screen: Install },
 ]
 
 export const AppConfigScreens = new Map([

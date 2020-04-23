@@ -14,7 +14,7 @@ function DaoApps() {
         `}
       >
         {loadingApps ? (
-          <Loading />
+          <Loading text="Loading apps" />
         ) : (
           daoApps.length > 0 && (
             <DataView
@@ -54,13 +54,13 @@ function DaoApps() {
   )
 }
 
-const Loading = () => {
+const Loading = ({ text }) => {
   return (
     <div
       css={`
         display: flex;
         align-items: center;
-        width: ${17 * GU}px;
+        width: ${22 * GU}px;
         margin: 0 auto;
       `}
     >
@@ -69,7 +69,7 @@ const Loading = () => {
           width: ${4 * GU}px;
         `}
       />
-      <span>Loading apps</span>
+      <span>{text}</span>
     </div>
   )
 }
