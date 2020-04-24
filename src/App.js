@@ -3,8 +3,12 @@ import { GU, Layout, Main } from '@aragon/ui'
 import Header from './components/Header/MainHeader'
 import Screens from './components/Screens'
 import { ScrollProvider } from './providers/ScrollProvider'
+import { useWallet } from './providers/Wallet'
+import EnableAccount from './EnableAccount'
 
 function App() {
+  const { account } = useWallet()
+
   return (
     <Main layout={false} scrollView={false}>
       <div
@@ -29,7 +33,7 @@ function App() {
                   overflow: hidden;
                 `}
               >
-                <Screens />
+                {account ? <Screens /> : <EnableAccount />}
               </div>
             </div>
           </Layout>
