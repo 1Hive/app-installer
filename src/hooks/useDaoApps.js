@@ -49,10 +49,12 @@ function useDaoApps(daoAddress) {
   const daoApps = useMemo(
     () =>
       apps
-        .filter(app => !app.isAragonOsInternalApp && Boolean(app.start_url)) // We'll filter apps that are meant as background apps (e.g market makers, oracles, etc)
+        .filter(app => !app.isAragonOsInternalApp)
         .map(({ appName, content, icons, name, proxyAddress }) => {
-          const iconRelativePath = icons[0].src
-          const iconSrc = getIPFSPath(content.location, iconRelativePath)
+          const iconRelativePath = icons?.[0].src
+          const iconSrc = iconRelativePath
+            ? getIPFSPath(content.location, iconRelativePath)
+            : ''
 
           return { appName, iconSrc, name, proxyAddress }
         }),

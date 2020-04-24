@@ -1,5 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Button, GU, IconCheck, Info, LoadingRing, useTheme } from '@aragon/ui'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  Button,
+  GU,
+  IconCheck,
+  IconCross,
+  LoadingRing,
+  useTheme,
+} from '@aragon/ui'
 import { useWallet } from '../../providers/Wallet'
 import { useInstallerState } from '../../providers/InstallerProvider'
 import { getInstallRawTx } from '../../utils/installer-utils'
@@ -78,7 +85,7 @@ function ConfirmTransactionPath({ onInstall }) {
 
   return (
     <form onSubmit={handleInstall}>
-      {!error && <TxPathStatus loading={loading} />}
+      <TxPathStatus loading={loading} error={error} />
       <div
         css={`
           margin-top: ${2 * GU}px;
@@ -93,23 +100,35 @@ function ConfirmTransactionPath({ onInstall }) {
           type="submit"
         />
       </div>
-      {error && (
-        <Info
-          css={`
-            margin-top: ${2 * GU}px;
-          `}
-          mode="error"
-        >
-          {error}
-        </Info>
-      )}
     </form>
   )
 }
 
-function TxPathStatus({ loading }) {
+function TxPathStatus({ loading, error }) {
   const theme = useTheme()
-  const text = loading ? 'Calculating tx path' : 'Tx path found!'
+  const { Icon, color, labelText } = useMemo(() => {
+    if (loading) {
+      return {
+        Icon: LoadingRing,
+        color: theme.contentSecondary,
+        labelText: 'Calculating tx path',
+      }
+    }
+
+    if (error) {
+      return {
+        Icon: IconCross,
+        color: theme.negative,
+        labelText: error,
+      }
+    }
+
+    return {
+      Icon: IconCheck,
+      color: theme.positive,
+      labelText: 'Tx path found!',
+    }
+  }, [error, loading, theme])
 
   return (
     <div
@@ -117,6 +136,7 @@ function TxPathStatus({ loading }) {
         display: flex;
         align-items: center;
         justify-content: center;
+        color: ${color};
       `}
     >
       <div
@@ -125,15 +145,9 @@ function TxPathStatus({ loading }) {
           margin-right: ${0.5 * GU}px;
         `}
       >
-        {loading ? <LoadingRing /> : <IconCheck color={theme.positive} />}
+        <Icon />
       </div>
-      <span
-        css={`
-          color: ${loading ? theme.content : theme.positive};
-        `}
-      >
-        {text}
-      </span>
+      <span>{labelText}</span>
     </div>
   )
 }
