@@ -9,8 +9,9 @@ const InstallerContext = React.createContext()
 function InstallerProvider({ children }) {
   const [step, setStep] = useState(0)
   const [daoDomain, setDaoDomain] = useState('')
-  const [selectedAppRepos, setSelectedAppRepos] = useState([])
   const [appsConfig, setAppsConfig] = useState(null)
+  const [appsSettings, setAppsSettings] = useState(null)
+  const [selectedAppRepos, setSelectedAppRepos] = useState([])
 
   // Try to resolve dao domain to dao address
   const [daoAddress, domainStatus] = useResolveDomain(daoDomain)
@@ -54,11 +55,16 @@ function InstallerProvider({ children }) {
     setAppsConfig(data)
   }, [])
 
+  const handleAppsSettingsChange = useCallback(settings => {
+    setAppsSettings(settings)
+  }, [])
+
   return (
     <InstallerContext.Provider
       value={{
         appRepos,
         appsConfig,
+        appsSettings,
         daoAddress,
         daoApps: apps,
         daoAppsInternal: internal,
@@ -69,6 +75,7 @@ function InstallerProvider({ children }) {
         onNext: handleNextStep,
         onSelectRepo: handleRepoSelected,
         onUpdateAppsConfig: handleAppsConfigChange,
+        onUpdateAppsSettings: handleAppsSettingsChange,
         onUpdateDaoDomain: handleDomainChange,
         selectedAppRepos,
         step,

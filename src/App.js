@@ -1,7 +1,6 @@
 import React from 'react'
 import { GU, Layout, Main } from '@aragon/ui'
-
-import Header from './components/Header/Header'
+import Header from './components/Header/MainHeader'
 import Screens from './components/Screens'
 import { ScrollProvider } from './providers/ScrollProvider'
 
@@ -19,11 +18,15 @@ function App() {
             <div
               css={`
                 height: 100%;
+                margin: ${6 * GU}px 0;
               `}
             >
               <div
                 css={`
-                  padding: ${10 * GU}px 0;
+                  position: relative;
+                  width: 50%;
+                  margin: 0 auto;
+                  overflow: hidden;
                 `}
               >
                 <Screens />

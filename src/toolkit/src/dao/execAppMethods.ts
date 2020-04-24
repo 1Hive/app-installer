@@ -1,15 +1,15 @@
 import ethers from 'ethers'
-import { initWrapper } from './utils/wrapper'
+import { getWrapper } from './utils/wrapper'
 
 /**
- * Execute multiple methods on different DAO's apps.
+ * Get transaction path from intent basket
  *
  * @param dao Dao address
  * @param intentBasket Intent basket
  * @param environment Environment
  * @returns Transaction path and receipt
  */
-export async function execAppMethods(
+export async function getTransactionPathFromIntentBasket(
   dao: string,
   intentBasket: Array<any>,
   environment: string,
@@ -18,7 +18,7 @@ export async function execAppMethods(
   path: string
   transaction: object
 }> {
-  const wrapper = await initWrapper(dao, environment, provider)
+  const wrapper = await getWrapper(dao, environment, provider)
 
   const transactionPath = await wrapper.getTransactionPathForIntentBasket(intentBasket, { checkMode: 'single' })
 

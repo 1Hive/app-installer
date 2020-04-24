@@ -2,12 +2,14 @@ import React from 'react'
 import { DataView, GU, LoadingRing } from '@aragon/ui'
 import { useInstallerState } from '../../providers/InstallerProvider'
 import Navigation from '../Navigation'
+import Header from '../Screens/Header'
 
-function DaoApps() {
+function DaoApps({ title }) {
   const { daoApps, loadingApps, onBack, onNext } = useInstallerState()
 
   return (
     <div>
+      <Header title={title} />
       <div
         css={`
           margin-bottom: ${3 * GU}px;

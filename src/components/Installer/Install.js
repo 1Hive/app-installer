@@ -3,6 +3,7 @@ import { Button, GU } from '@aragon/ui'
 import ConfirmTransactionPath from './ConfirmTransaction'
 import TransactionStatus from './TransactionStatus'
 import { useWallet } from '../../providers/Wallet'
+import { useInstallerState } from '../../providers/InstallerProvider'
 import {
   TX_STATUS_SIGNED,
   TX_STATUS_PENDING,
@@ -10,6 +11,8 @@ import {
   TX_STATUS_SIGNATURE_FAILED,
   TX_STATUS_FAILED,
 } from './transaction-statuses'
+import Header from '../Screens/Header'
+import { buildDaoUrl } from '../../utils/utils'
 
 const EMPTY_STATE = {
   signing: false,
@@ -20,10 +23,11 @@ const EMPTY_STATE = {
   rawTx: null,
 }
 
-function Install() {
+function Install({ title }) {
   const { ethers } = useWallet()
   const [attempts, setAttempt] = useState(0)
   const [progress, setProgress] = useState(EMPTY_STATE)
+  const { daoDomain } = useInstallerState()
 
   const handleInstall = useCallback(rawTx => {
     setProgress(progress => ({ ...progress, signing: true, rawTx }))
@@ -100,31 +104,40 @@ function Install() {
     return TX_STATUS_PENDING
   }, [progress])
 
-  return progress.signing ? (
-    <div
-      css={`
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      `}
-    >
-      <TransactionStatus status={status} />
-      <div
-        css={`
-          margin-top: ${2 * GU}px;
-        `}
-      >
-        {status === TX_STATUS_CONFIRMED && (
-          <Button href="" label="Open DAO" mode="strong" />
-        )}
-        {(status === TX_STATUS_FAILED ||
-          status === TX_STATUS_SIGNATURE_FAILED) && (
-          <Button label="Retry" mode="strong" onClick={handleNextAttempt} />
-        )}
-      </div>
+  return (
+    <div>
+      <Header title={title} />
+      {progress.signing ? (
+        <div
+          css={`
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          `}
+        >
+          <TransactionStatus status={status} />
+          <div
+            css={`
+              margin-top: ${2 * GU}px;
+            `}
+          >
+            {status === TX_STATUS_CONFIRMED && (
+              <Button
+                href={buildDaoUrl(daoDomain)}
+                label="Open DAO"
+                mode="strong"
+              />
+            )}
+            {(status === TX_STATUS_FAILED ||
+              status === TX_STATUS_SIGNATURE_FAILED) && (
+              <Button label="Retry" mode="strong" onClick={handleNextAttempt} />
+            )}
+          </div>
+        </div>
+      ) : (
+        <ConfirmTransactionPath onInstall={handleInstall} />
+      )}
     </div>
-  ) : (
-    <ConfirmTransactionPath onInstall={handleInstall} />
   )
 }
 

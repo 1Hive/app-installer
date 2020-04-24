@@ -4,21 +4,23 @@ import RepoCardGroup from './RepoCardGroup'
 import { useInstallerState } from '../../providers/InstallerProvider'
 import Navigation from '../Navigation'
 import { validateDAO } from '../../utils'
+import Header from '../Screens/Header'
 
-function AppSelector() {
+function AppSelector({ title }) {
   const {
     appRepos,
     daoApps,
-    selectedAppRepos,
     onBack,
     onNext,
     onSelectRepo,
+    selectedAppRepos,
   } = useInstallerState()
 
   const error = validateDAO(daoApps, selectedAppRepos)
 
   return (
     <div>
+      <Header title={title} />
       <div
         css={`
           margin-bottom: ${3 * GU}px;

@@ -3,14 +3,15 @@ import { Accordion, AppBadge, GU, textStyle, useTheme } from '@aragon/ui'
 import { useInstallerState } from '../../providers/InstallerProvider'
 import Navigation from '../Navigation'
 import { AppConfigScreens } from './config'
+import Header from './Header'
 
-function ReviewScreen() {
+function ReviewScreen({ title }) {
   const theme = useTheme()
   const {
     appsConfig,
     onBack,
     onNext,
-    onUpdateAppsConfig,
+    onUpdateAppsSettings,
     selectedAppRepos,
   } = useInstallerState()
 
@@ -25,9 +26,9 @@ function ReviewScreen() {
       }
     }, {})
 
-    onUpdateAppsConfig(processedSettings)
+    onUpdateAppsSettings(processedSettings)
     onNext()
-  }, [appsConfig, onNext, onUpdateAppsConfig, selectedAppRepos])
+  }, [appsConfig, onNext, onUpdateAppsSettings, selectedAppRepos])
 
   const items = useMemo(
     () =>
@@ -44,7 +45,7 @@ function ReviewScreen() {
 
   return (
     <div>
-      <h1>Review information</h1>
+      <Header title={title} />
       <div
         css={`
           margin-bottom: ${3 * GU}px;

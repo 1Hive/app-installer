@@ -1,19 +1,19 @@
 import {
   encodeActCall,
-  execAppMethods,
-  getCounterfactualAppAddress,
   getTransactionPath,
-} from './toolkit'
-import { parseInitParams, parsePermissionIntents } from './utils'
-import { getNetworkType } from './lib/web3-utils'
+  getTransactionPathFromIntentBasket,
+} from '../toolkit'
+import { parseInitParams, parsePermissionIntents } from '../utils'
+import {
+  getNetworkType,
+  calculateNewProxyAddress,
+  buildNonceForAddress,
+} from '../lib/web3-utils'
 
 const newAppInstanceSignature = 'newAppInstance(bytes32,address,bytes,bool)'
 
 async function getInitPayload(daoApps, functions, appInitParams, settings) {
-  console.log('settings', settings)
   const appInitArgs = parseInitParams(daoApps, appInitParams, settings)
-
-  console.log('appInitArgs', appInitArgs)
 
   const appInit = functions.find(fn => fn.abi.name === 'initialize')
   return encodeActCall(appInit.sig, appInitArgs)
@@ -26,25 +26,19 @@ export async function getInstallRawTx(
   appsSettings,
   provider
 ) {
-  let scriptExecutor
-  console.log(
-    'calling install with',
-    daoAddress,
-    daoApps,
-    selectedApps,
-    appsSettings
-  )
-
+  let intentBasket = []
   try {
-    for (const {
-      id,
-      appId,
-      appInitParams,
-      contractAddress,
-      functions,
-      permissions,
-      roles,
-    } of selectedApps) {
+    for (const [index, selectedApp] of selectedApps.entries()) {
+      const {
+        id,
+        appId,
+        appInitParams,
+        contractAddress,
+        functions,
+        permissions,
+        roles,
+      } = selectedApp
+
       const appSettings = appsSettings[id]
       // Build install App intent
       const initPayload = await getInitPayload(
@@ -73,19 +67,12 @@ export async function getInstallRawTx(
         throw new Error('Could not find tx path for given address')
       }
 
-      scriptExecutor =
-        path.length === 1 ? path[0].from : path[path.length - 2].to
+      // const scriptExecutor =
+      //   path.length === 1 ? path[0].from : path[path.length - 2].to
 
       // Get conterfatual proxy address for app
-      const proxyAddress = await getCounterfactualAppAddress(
-        daoAddress,
-        appId,
-        contractAddress,
-        initPayload,
-        scriptExecutor,
-        getNetworkType(),
-        provider
-      )
+      const nonce = await buildNonceForAddress(daoAddress, index, provider)
+      const proxyAddress = await calculateNewProxyAddress(daoAddress, nonce)
 
       const permissionIntents = parsePermissionIntents(
         daoApps,
@@ -94,19 +81,22 @@ export async function getInstallRawTx(
         proxyAddress
       )
 
-      const intentBasket = [installAppIntent, ...permissionIntents]
+      const appInstallIntentBasket = [installAppIntent, ...permissionIntents]
 
-      const { transaction } = await execAppMethods(
-        daoAddress,
-        intentBasket,
-        getNetworkType(),
-        provider
-      )
-
-      const { to, data } = transaction
-
-      return { to, data }
+      intentBasket = [...intentBasket, ...appInstallIntentBasket]
     }
+
+    // Get transaction path for install and permission intents
+    const { transaction } = await getTransactionPathFromIntentBasket(
+      daoAddress,
+      intentBasket,
+      getNetworkType(),
+      provider
+    )
+
+    const { to, data } = transaction
+
+    return { to, data }
   } catch (err) {
     console.error(err)
     throw err

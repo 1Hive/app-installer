@@ -12,12 +12,12 @@ import TokenRequestScreen from './TokenRequestScreen'
 import { ETHER_TOKEN_FAKE_ADDRESS } from '../../helpers/tokens'
 
 export const InstallerScreens = [
-  { Screen: DaoLoader },
-  { Screen: DaoApps },
-  { Screen: AppSelector },
-  { Screen: AppConfiguration },
-  { Screen: ReviewScreen },
-  { Screen: Install },
+  { Screen: DaoLoader, title: 'Load DAO' },
+  { Screen: DaoApps, title: 'Review apps' },
+  { Screen: AppSelector, title: 'Select repos' },
+  { Screen: AppConfiguration, title: 'Configure apps' },
+  { Screen: ReviewScreen, title: 'Review configuration' },
+  { Screen: Install, title: 'Install apps' },
 ]
 
 export const AppConfigScreens = new Map([
@@ -62,7 +62,9 @@ export const AppConfigScreens = new Map([
       Screen: TokenRequestScreen,
       appLabel: 'Token Request',
       processData: data => ({
-        acceptedTokens: data.acceptedTokens.map(({ token }) => token.address),
+        acceptedTokens: data.acceptedTokens
+          .map(({ token }) => token.address)
+          .sort(),
       }),
       formatReviewFields: screenData => {
         return [

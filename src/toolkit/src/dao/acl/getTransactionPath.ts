@@ -1,6 +1,6 @@
 import { takeWhile, map, filter, first, defaultIfEmpty } from 'rxjs/operators'
 import ethers from 'ethers'
-import { initWrapper } from '../utils/wrapper'
+import { getWrapper } from '../utils/wrapper'
 import { addressesEqual } from '../../utils/addresses'
 import { AragonApp } from '../../types'
 
@@ -28,7 +28,7 @@ export async function getTransactionPath(
   provider: ethers.providers.Web3Provider
 ): Promise<TransactionPath> {
 
-  const wrapper = await initWrapper(dao, environment, provider)
+  const wrapper = await getWrapper(dao, environment, provider)
 
   // Wait for app info to load
   const apps = await wrapper.apps

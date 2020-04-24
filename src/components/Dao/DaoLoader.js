@@ -1,7 +1,8 @@
 import React from 'react'
-import { Field, GU, LoadingRing, TextInput, useTheme } from '@aragon/ui'
+import { Field, GU, Info, LoadingRing, TextInput, useTheme } from '@aragon/ui'
 import { useInstallerState } from '../../providers/InstallerProvider'
 import CheckDisc from '../CheckDisk'
+import Header from '../Screens/Header'
 import Navigation from '../Navigation'
 import {
   DOMAIN_CHECK,
@@ -11,7 +12,7 @@ import {
 } from '../../check-domain'
 import { ARAGON_DOMAIN } from '../../lib/web3-utils'
 
-function DaoLoader() {
+function DaoLoader({ title }) {
   const theme = useTheme()
   const {
     daoDomain,
@@ -22,6 +23,7 @@ function DaoLoader() {
 
   return (
     <div>
+      <Header title={title} />
       <div
         css={`
           display: flex;
@@ -78,7 +80,13 @@ function DaoLoader() {
           </div>
         )}
       </div>
-
+      <Info
+        css={`
+          margin-bottom: ${2 * GU}px;
+        `}
+      >
+        Please select your organization
+      </Info>
       <Navigation
         nextEnabled={domainStatus === DOMAIN_CHECK}
         onNext={onNext}

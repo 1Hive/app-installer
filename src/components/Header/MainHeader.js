@@ -2,7 +2,7 @@ import React from 'react'
 import { GU, textStyle } from '@aragon/ui'
 import AccountModule from '../Account/AccountModule'
 
-function Header() {
+function MainHeader() {
   return (
     <header
       css={`
@@ -27,4 +27,4 @@ function Header() {
   )
 }
 
-export default Header
+export default MainHeader

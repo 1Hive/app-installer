@@ -20,10 +20,6 @@ function useDaoApps(daoAddress) {
     const fetchDAOInstalledApps = async () => {
       setLoading(true)
 
-      if (!daoAddress) {
-        return
-      }
-
       try {
         const installedApps = await getInstalledApps(
           daoAddress,

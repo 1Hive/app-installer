@@ -3,8 +3,9 @@ import { GU } from '@aragon/ui'
 import { AppConfigScreens } from './config'
 import { useInstallerState } from '../../providers/InstallerProvider'
 import { useScroll } from '../../providers/ScrollProvider'
+import Header from './Header'
 
-function AppConfiguration() {
+function AppConfiguration({ title }) {
   const {
     appsConfig,
     selectedAppRepos,
@@ -71,6 +72,7 @@ function AppConfiguration() {
 
   return (
     <div>
+      <Header title={title} />
       <div
         css={`
           margin-bottom: ${3 * GU}px;

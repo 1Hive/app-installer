@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Button, GU, IconCheck, Info, LoadingRing, useTheme } from '@aragon/ui'
 import { useWallet } from '../../providers/Wallet'
 import { useInstallerState } from '../../providers/InstallerProvider'
-import { getInstallRawTx } from '../../installer-utils'
+import { getInstallRawTx } from '../../utils/installer-utils'
 
 function ConfirmTransactionPath({ onInstall }) {
   const { ethers } = useWallet()
   const {
-    appsConfig,
+    appsSettings,
     daoAddress,
     daoApps,
     daoAppsInternal,
@@ -23,9 +23,18 @@ function ConfirmTransactionPath({ onInstall }) {
     setAttempt(attempt => attempt + 1)
   }, [])
 
-  const handleInstall = useCallback(() => {
-    onInstall(rawTx)
-  }, [onInstall, rawTx])
+  const handleInstall = useCallback(
+    event => {
+      event.preventDefault()
+
+      if (error) {
+        return handleNextAttempt()
+      }
+
+      onInstall(rawTx)
+    },
+    [error, handleNextAttempt, onInstall, rawTx]
+  )
 
   useEffect(() => {
     if (rawTx) {
@@ -42,7 +51,7 @@ function ConfirmTransactionPath({ onInstall }) {
           daoAddress,
           daoApps.concat(daoAppsInternal),
           selectedAppRepos,
-          appsConfig,
+          appsSettings,
           ethers
         )
 
@@ -57,7 +66,7 @@ function ConfirmTransactionPath({ onInstall }) {
 
     getTransactionPath()
   }, [
-    appsConfig,
+    appsSettings,
     attempt,
     daoAddress,
     daoApps,
@@ -68,7 +77,7 @@ function ConfirmTransactionPath({ onInstall }) {
   ])
 
   return (
-    <div>
+    <form onSubmit={handleInstall}>
       {!error && <TxPathStatus loading={loading} />}
       <div
         css={`
@@ -79,8 +88,9 @@ function ConfirmTransactionPath({ onInstall }) {
         <Button
           label={error ? 'Retry' : 'Install apps!'}
           disabled={loading}
-          onClick={error ? handleNextAttempt : handleInstall}
+          mode="strong"
           css="width: 50%"
+          type="submit"
         />
       </div>
       {error && (
@@ -93,7 +103,7 @@ function ConfirmTransactionPath({ onInstall }) {
           {error}
         </Info>
       )}
-    </div>
+    </form>
   )
 }
 
@@ -106,8 +116,7 @@ function TxPathStatus({ loading }) {
       css={`
         display: flex;
         align-items: center;
-        width: ${22 * GU}px;
-        margin: 0 auto;
+        justify-content: center;
       `}
     >
       <div

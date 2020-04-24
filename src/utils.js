@@ -6,7 +6,7 @@ export const IPFS_ENDPOINT = 'https://ipfs.eth.aragon.network/ipfs'
 // Note that we can get inint params from both installed apps and settings screens
 export function parseInitParams(daoApps, appInitParams, settings) {
   return appInitParams
-    .sort((p1, p2) => p1.priority < p2.priority)
+    .sort((p1, p2) => p1.position < p2.position)
     .map(param => {
       if (param.isApp) {
         return daoApps.find(app => hasAppParam(app, param)).proxyAddress

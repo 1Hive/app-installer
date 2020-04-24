@@ -2,17 +2,17 @@
   {
     "id": "redemptions",
     "appInitParams": [{
-      "priority": 1,
+      "position": 1,
         "isApp": true,
         "ref": ["vault.aragonpm.eth", "agent.aragonpm.eth"]
       },
       {
-        "priority": 2,
+        "position": 2,
         "isApp": true,
         "ref": "token-manager.aragonpm.eth" 
       },
       {
-        "priority": 3,
+        "position": 3,
         "ref": "redeemableTokens",
         "prop": "address"
       }
@@ -29,19 +29,20 @@
   {
     "id": "token-request",
     "appInitParams": [{
-      "priority": 1,
+      "position": 1,
       "isApp": true,
       "ref": "token-manager.aragonpm.eth" 
     },
     {
-      "priority": 2,
+      "position": 2,
       "isApp": true,
       "ref": ["vault.aragonpm.eth", "agent.aragonpm.eth"]
     }, 
     {
-      "priority": 3,
+      "position": 3,
       "ref": "acceptedTokens",
-      "prop": "address"
+      "prop": "address",
+      "sort": true
     }
   ],
     "permissions": {

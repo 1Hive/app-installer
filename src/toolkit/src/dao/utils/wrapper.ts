@@ -1,6 +1,7 @@
 import { resolveDaoAddressOrEnsDomain } from '../../utils/resolvers'
 import { useEnvironment } from '../../helpers/useEnvironment'
 import { ethers } from 'ethers'
+import { addressesEqual } from '../../utils'
 // Note: Must use require because '@aragon/wrapper' is an untyped library
 // without type definitions or @types/@aragon/wrapper
 /* eslint-disable @typescript-eslint/no-var-requires */
@@ -17,8 +18,8 @@ let wrapper: any = null
  * @param options Options
  * @returns  Aragon wrapper with an added `cancel` function
  */
-export async function initWrapper(
-  dao: string,
+async function initWrapper(
+  daoAddress: string,
   environment: string,
   provider: ethers.providers.Web3Provider,
   options?: {
@@ -31,8 +32,7 @@ export async function initWrapper(
   },
   ): Promise<any> {
     
-    const { apmOptions, gasPrice } = useEnvironment(environment)
-    const daoAddress = await resolveDaoAddressOrEnsDomain(dao, environment)
+  const { apmOptions, gasPrice } = useEnvironment(environment)
 
   if (!daoAddress) {
     throw new Error('The provided DAO address is invalid')
@@ -43,6 +43,7 @@ export async function initWrapper(
     if (onDaoAddress) onDaoAddress(daoAddress)
   }
 
+
   if (!wrapper) {
     wrapper = new AragonWrapper(daoAddress, {
       provider: provider?._web3Provider,
@@ -50,11 +51,11 @@ export async function initWrapper(
       apm: apmOptions,
     })
 
-    const accounts = (options?.accounts) || await provider.send("eth_accounts", [])
+    const accounts = (options?.accounts) || await provider.listAccounts()
     console.log(accounts)
   
     try {
-      await wrapper.init({ accounts: { providedAccounts: accounts } })
+      await wrapper.init({ accounts: { fetchFromWeb3: true, providedAccounts: accounts } })
     } catch (err) {
       if (err.message === 'connection not open') {
         throw new Error('The wrapper cannot be initialized without a connection')
@@ -76,6 +77,34 @@ export async function initWrapper(
         if (subscription) subscription.unsubscribe()
     }
   }
-
+  
   return wrapper
 }
+
+export async function getWrapper(
+  dao: string,
+  environment: string,
+  provider: ethers.providers.Web3Provider,
+  options?: {
+    accounts?: string[]
+    onApps?: (apps: any) => void
+    onForwarders?: (forwarders: any) => void
+    onTransaction?: (transaction: any) => void
+    onDaoAddress?: (daoAddress: string) => void
+    onPermissions?: (permissions: any) => void
+  }): Promise<any> {
+
+    const daoAddress = await resolveDaoAddressOrEnsDomain(dao, environment)
+
+    console.log('getting wrapper', wrapper)
+    if (wrapper) {
+      if (addressesEqual(daoAddress, wrapper.kernelProxy.address)) {
+        return wrapper
+      }
+
+      wrapper.cancel()
+      wrapper = null
+    }
+
+    return initWrapper(daoAddress, environment, provider,options)
+  }

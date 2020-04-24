@@ -1,8 +1,6 @@
 import ethers from 'ethers'
 import { takeWhile } from 'rxjs/operators'
-import { useEnvironment } from '../../helpers/useEnvironment'
-import { initWrapper } from '../utils/wrapper'
-import { kernelAbi } from '../../contractAbis'
+import { getWrapper } from '../utils/wrapper'
 
 type AragonApp = any
 
@@ -18,7 +16,9 @@ export async function getInstalledApps(
   environment: string,
   provider: ethers.providers.Web3Provider
 ): Promise<AragonApp[]> {
-  const wrapper = await initWrapper(dao, environment, provider)
+
+  const wrapper = await getWrapper(dao, environment, provider)
+
   return (
     wrapper.apps
       // If the app list contains a single app, wait for more
