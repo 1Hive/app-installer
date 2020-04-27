@@ -52,7 +52,6 @@ async function initWrapper(
     })
 
     const accounts = (options?.accounts) || await provider.listAccounts()
-    console.log(accounts)
   
     try {
       await wrapper.init({ accounts: { fetchFromWeb3: true, providedAccounts: accounts } })
@@ -96,7 +95,6 @@ export async function getWrapper(
 
     const daoAddress = await resolveDaoAddressOrEnsDomain(dao, environment)
 
-    console.log('getting wrapper', wrapper)
     if (wrapper) {
       if (addressesEqual(daoAddress, wrapper.kernelProxy.address)) {
         return wrapper

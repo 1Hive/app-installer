@@ -1,5 +1,5 @@
 {
-  "name": "app-onboarding",
+  "name": "app-installer",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -69,6 +69,7 @@
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "eslint-plugin-standard": "^4.0.1",
+    "husky": "^4.2.5",
     "prettier": "^1.19.1",
     "react-app-rewired": "^2.1.5",
     "react-dev-utils": "^10.2.1",

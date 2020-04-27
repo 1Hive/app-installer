@@ -22,7 +22,8 @@
         { "entity": "any", "role": "REDEEM_ROLE", "manager": "voting.aragonpm.eth" }
       ],
       "grant": [
-        { "entity": "this", "where": "token-manager.aragonpm.eth", "role": "BURN_ROLE", "manager": "voting.aragonpm.eth" } 
+        { "where": "token-manager.aragonpm.eth", "role": "BURN_ROLE" },
+        { "where": ["agent.aragonpm.eth", "vault.aragonpm.eth"], "role": "TRANSFER_ROLE" } 
       ]
     }
   },
@@ -50,7 +51,7 @@
         { "entity": "voting.aragonpm.eth", "role": "FINALISE_TOKEN_REQUEST_ROLE", "manager": "voting.aragonpm.eth" }
       ],
       "grant": [
-        { "entity": "this", "where": "token-manager.aragonpm.eth", "role": "MINT_ROLE", "manager": "voting.aragonpm.eth" }
+        { "where": "token-manager.aragonpm.eth", "role": "MINT_ROLE" }
       ]
     }
   }

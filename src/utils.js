@@ -9,28 +9,32 @@ export function parseInitParams(daoApps, appInitParams, settings) {
     .sort((p1, p2) => p1.position < p2.position)
     .map(param => {
       if (param.isApp) {
-        return daoApps.find(app => hasAppParam(app, param)).proxyAddress
+        return daoApps.find(app => hasAppParamRef(app, param.ref)).proxyAddress
       }
 
       return settings[param.ref]
     })
 }
 
-const hasAppParam = (app, param) =>
-  Array.isArray(param.ref)
-    ? param.ref.includes(app.appName)
-    : param.ref === app.appName
+const hasAppParamRef = (app, ref) =>
+  Array.isArray(ref) ? ref.includes(app.appName) : ref === app.appName
 
 const getPermissionAddressByRef = (daoApps, ref) => {
   return ref === 'any'
     ? ANY_ENTITY
-    : daoApps.find(app => ref === app.appName).proxyAddress
+    : daoApps.find(app => hasAppParamRef(app, ref)).proxyAddress
+}
+
+const getPermissionRoleByRef = (daoApps, role, ref) => {
+  return daoApps
+    .find(app => hasAppParamRef(app, ref))
+    .roles.find(appRole => appRole.id === role).bytes
 }
 
 export function parsePermissionIntents(
   daoApps,
   permissions,
-  roles,
+  selectedAppRoles,
   counterfactualAppAddr
 ) {
   const aclProxyAddress = daoApps.find(app => app.name.toLowerCase() === 'acl')
@@ -38,8 +42,9 @@ export function parsePermissionIntents(
 
   const createPermissionIntents = permissions.create.map(
     ({ entity, role, manager }) => {
-      const roleBytes = roles.find(availableRole => availableRole.id === role)
-        .bytes
+      const roleBytes = selectedAppRoles.find(
+        availableRole => availableRole.id === role
+      ).bytes
 
       return [
         aclProxyAddress,
@@ -54,20 +59,15 @@ export function parsePermissionIntents(
     }
   )
 
-  // const grantPermissionIntents = permissions.grant.map(
-  //   ({ entity, role, manager }) => {
-  //     const roleBytes = roles.find(availableRole => availableRole.id === role)
-  //       .bytes
+  const grantPermissionIntents = permissions.grant.map(({ role, where }) => {
+    const entity = counterfactualAppAddr
+    const app = getPermissionAddressByRef(daoApps, where)
+    const roleBytes = getPermissionRoleByRef(daoApps, role, where)
 
-  //     return [
-  //       aclProxyAddress,
-  //       'grantPermission',
-  //       [entity, counterfactualAppAddr, roleBytes, manager],
-  //     ]
-  //   }
-  // )
+    return [aclProxyAddress, 'grantPermission', [entity, app, roleBytes]]
+  })
 
-  return createPermissionIntents
+  return [...createPermissionIntents, ...grantPermissionIntents]
 }
 
 // Validates that the DAO has the required apps installed in order to initialize the apps
@@ -79,7 +79,7 @@ export function validateDAO(daoApps, selectedApps) {
     .map(app => app.appInitParams.filter(param => param.isApp))
     .flat()
     .reduce((acc, param) => {
-      const hasApp = daoApps.some(daoApp => hasAppParam(daoApp, param))
+      const hasApp = daoApps.some(daoApp => hasAppParamRef(daoApp, param.ref))
       if (!hasApp) {
         missingApp = param.ref
       }

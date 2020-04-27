@@ -1,5 +1,6 @@
 import env from '../environment'
 import { keccak256, RLP } from 'ethers/utils'
+import { getDefaultChain } from '../local-settings'
 
 export const ARAGON_DOMAIN = 'aragonid.eth'
 export const DEFAULT_LOCAL_CHAIN = ''
@@ -33,7 +34,7 @@ export function getUseWalletConnectors() {
   }, {})
 }
 
-export function getNetworkType(chainId = env('CHAIN_ID')) {
+export function getNetworkType(chainId = getDefaultChain()) {
   chainId = String(chainId)
 
   if (chainId === '1') return 'mainnet'
@@ -43,7 +44,7 @@ export function getNetworkType(chainId = env('CHAIN_ID')) {
   return DEFAULT_LOCAL_CHAIN
 }
 
-export function getNetworkName(chainId = env('CHAIN_ID')) {
+export function getNetworkName(chainId = getDefaultChain()) {
   chainId = String(chainId)
 
   if (chainId === '1') return 'Mainnet'
@@ -53,7 +54,7 @@ export function getNetworkName(chainId = env('CHAIN_ID')) {
   return 'unknown'
 }
 
-export function isLocalOrUnknownNetwork(chainId = env('CHAIN_ID')) {
+export function isLocalOrUnknownNetwork(chainId = getDefaultChain()) {
   return getNetworkType(chainId) === DEFAULT_LOCAL_CHAIN
 }
 
