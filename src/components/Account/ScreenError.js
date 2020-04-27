@@ -82,7 +82,7 @@ function AccountModuleErrorScreen({ error, onBack }) {
 }
 
 AccountModuleErrorScreen.propTypes = {
-  error: PropTypes.instanceOf(Error),
+  error: PropTypes.object,
   onBack: PropTypes.func.isRequired,
 }
 

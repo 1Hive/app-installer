@@ -8,7 +8,6 @@ import { useWallet } from '../providers/Wallet'
 // Hook for fetching apps available for installation apm repos (see apps.json)
 function useAppRepos() {
   const [repos, setRepos] = useState([])
-
   const { ethers } = useWallet()
 
   useEffect(() => {
