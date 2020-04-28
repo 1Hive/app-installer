@@ -2,7 +2,7 @@
 
 Basic UI to enable users to install apps to their DAO in a more accesible way.
 
-**Currently available apps:** [Redemptions](https://github.com/1Hive/redemptions-app), [Token Request](https://github.com/1Hive/token-request-app)
+**Currently available apps:** [Redemptions](https://github.com/1Hive/redemptions-app), [Token Request](https://github.com/1Hive/token-request-app), [Transactions](https://github.com/1Hive/transactions-app/)
 
 #### Try it out locally: 
 
@@ -23,9 +23,5 @@ npm install
 
 4. Start installer 
 ```
-npm run start:rinkeby
-
-#or
-
-npm run start:mainnet
+npm start
 ```
