@@ -22,8 +22,6 @@ export async function getInstallRawTx(
 ) {
   let intentBasket = []
 
-  console.log('calling iwth', daoAddress, selectedApps)
-
   try {
     for (const [index, selectedApp] of selectedApps.entries()) {
       const {
