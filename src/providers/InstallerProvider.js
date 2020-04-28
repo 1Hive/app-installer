@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import PropTypes from 'prop-types'
 import useDaoApps from '../hooks/useDaoApps'
 import useAppRepos from '../hooks/useAppRepos'
@@ -59,6 +65,11 @@ function InstallerProvider({ children }) {
     setAppsSettings(settings)
   }, [])
 
+  const configurableApps = useMemo(
+    () => selectedAppRepos.filter(repo => Boolean(repo.appInitParams)),
+    [selectedAppRepos]
+  )
+
   useEffect(() => {
     if (!daoAddress) {
       setStep(0)
@@ -71,6 +82,7 @@ function InstallerProvider({ children }) {
         appRepos,
         appsConfig,
         appsSettings,
+        configurableApps,
         daoAddress,
         daoApps: apps,
         daoAppsInternal: internal,

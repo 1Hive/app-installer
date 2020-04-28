@@ -91,4 +91,13 @@ export const AppConfigScreens = new Map([
       },
     },
   ],
+  [
+    'transactions',
+    {
+      appLabel: 'Transactions',
+      formatReviewFields: () => {
+        return [['No params', <div />]]
+      },
+    },
+  ],
 ])

@@ -8,7 +8,7 @@ import Header from './Header'
 function AppConfiguration({ title }) {
   const {
     appsConfig,
-    selectedAppRepos,
+    configurableApps,
     onBack,
     onNext,
     onUpdateAppsConfig,
@@ -44,7 +44,7 @@ function AppConfiguration({ title }) {
       const updatedData = { ...screensData, ...screenData }
 
       // Save screensData and go to next installer screen
-      if (step === selectedAppRepos.length - 1) {
+      if (step === configurableApps.length - 1) {
         onUpdateAppsConfig(updatedData)
         return onNext()
       }
@@ -60,11 +60,11 @@ function AppConfiguration({ title }) {
       setStep(step => step + 1)
     },
     [
+      configurableApps,
       onNext,
       onUpdateAppsConfig,
       screensData,
       scrollTo,
-      selectedAppRepos,
       step,
       updateScreensData,
     ]
@@ -78,7 +78,7 @@ function AppConfiguration({ title }) {
           margin-bottom: ${3 * GU}px;
         `}
       >
-        {selectedAppRepos.map(({ iconSrc, id }, index) => {
+        {configurableApps.map(({ iconSrc, id }, index) => {
           const { Screen } = AppConfigScreens.get(id)
 
           //  TODO: Generalize component

@@ -3,7 +3,7 @@ import {
   getTransactionPath,
   getTransactionPathFromIntentBasket,
 } from '../toolkit'
-import { parseInitParams, parsePermissionIntents } from '../utils'
+import { parseInitParams, buildPermissionIntents } from '../utils'
 import {
   getNetworkType,
   calculateNewProxyAddress,
@@ -13,7 +13,9 @@ import {
 const newAppInstanceSignature = 'newAppInstance(bytes32,address,bytes,bool)'
 
 async function getInitPayload(daoApps, functions, appInitParams, settings) {
-  const appInitArgs = parseInitParams(daoApps, appInitParams, settings)
+  const appInitArgs = settings
+    ? parseInitParams(daoApps, appInitParams, settings)
+    : []
 
   const appInit = functions.find(fn => fn.abi.name === 'initialize')
   return encodeActCall(appInit.sig, appInitArgs)
@@ -27,6 +29,7 @@ export async function getInstallRawTx(
   provider
 ) {
   let intentBasket = []
+
   try {
     for (const [index, selectedApp] of selectedApps.entries()) {
       const {
@@ -39,7 +42,7 @@ export async function getInstallRawTx(
         roles,
       } = selectedApp
 
-      const appSettings = appsSettings[id]
+      const appSettings = appsSettings ? appsSettings[id] : null
       // Build install App intent
       const initPayload = await getInitPayload(
         daoApps,
@@ -74,7 +77,7 @@ export async function getInstallRawTx(
       const nonce = await buildNonceForAddress(daoAddress, index, provider)
       const proxyAddress = await calculateNewProxyAddress(daoAddress, nonce)
 
-      const permissionIntents = parsePermissionIntents(
+      const permissionIntents = buildPermissionIntents(
         daoApps,
         permissions,
         roles,
