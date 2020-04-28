@@ -1,6 +1,7 @@
 [
   {
     "id": "redemptions",
+    "appName": "redemptions",
     "appInitParams": [{
       "position": 1,
         "isApp": true,
@@ -29,6 +30,7 @@
   },
   {
     "id": "token-request",
+    "appName": "token-request",
     "appInitParams": [{
       "position": 1,
       "isApp": true,
@@ -52,6 +54,15 @@
       ],
       "grant": [
         { "where": "token-manager.aragonpm.eth", "role": "MINT_ROLE" }
+      ]
+    }
+  },
+  {
+    "id": "transactions",
+    "appName": "transactions.open.aragonpm.eth",
+    "permissions": {
+      "create": [
+        { "entity": "voting.aragonpm.eth", "role": "", "manager": "voting.aragonpm.eth" }
       ]
     }
   }
