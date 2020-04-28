@@ -50,13 +50,13 @@ function useDaoApps(daoAddress) {
     () =>
       apps
         .filter(app => !app.isAragonOsInternalApp)
-        .map(({ appName, content, icons, name, proxyAddress }) => {
+        .map(({ appName, content, icons, name, proxyAddress, roles }) => {
           const iconRelativePath = icons?.[0].src
           const iconSrc = iconRelativePath
             ? getIPFSPath(content.location, iconRelativePath)
             : ''
 
-          return { appName, iconSrc, name, proxyAddress }
+          return { appName, iconSrc, name, proxyAddress, roles }
         }),
     [apps]
   )

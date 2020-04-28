@@ -1,6 +1,7 @@
 import React from 'react'
 import { GU, textStyle } from '@aragon/ui'
 import AccountModule from '../Account/AccountModule'
+import Network from '../Network/Network'
 
 function MainHeader() {
   return (
@@ -22,7 +23,15 @@ function MainHeader() {
           App installer
         </h3>
       </div>
-      <AccountModule />
+      <div
+        css={`
+          display: flex;
+          align-items: center;
+        `}
+      >
+        <Network />
+        <AccountModule />
+      </div>
     </header>
   )
 }

@@ -1,10 +1,10 @@
 // rinkeby
-const CHAIN_ID_DEFAULT = 4
+const DEFAULT_CHAIN_ID = 4
 
 const ENV_VARS = {
   CHAIN_ID() {
     const chainId = parseInt(process.env.REACT_APP_CHAIN_ID)
-    return isNaN(chainId) ? CHAIN_ID_DEFAULT : chainId
+    return isNaN(chainId) ? DEFAULT_CHAIN_ID : chainId
   },
 
   FORTMATIC_API_KEY() {

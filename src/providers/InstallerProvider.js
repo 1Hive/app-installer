@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import useDaoApps from '../hooks/useDaoApps'
 import useAppRepos from '../hooks/useAppRepos'
@@ -58,6 +58,12 @@ function InstallerProvider({ children }) {
   const handleAppsSettingsChange = useCallback(settings => {
     setAppsSettings(settings)
   }, [])
+
+  useEffect(() => {
+    if (!daoAddress) {
+      setStep(0)
+    }
+  }, [daoAddress])
 
   return (
     <InstallerContext.Provider
