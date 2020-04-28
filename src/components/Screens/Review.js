@@ -20,6 +20,10 @@ function ReviewScreen({ title }) {
       const { processData } = AppConfigScreens.get(id)
 
       const data = appsConfig[id]
+      if (!data) {
+        return acc
+      }
+
       return {
         ...acc,
         [id]: typeof processData === 'function' ? processData(data) : data,

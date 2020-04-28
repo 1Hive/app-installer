@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { GU, springs } from '@aragon/ui'
 import { Transition, animated } from 'react-spring/renderprops'
 import { InstallerScreens } from './config'
@@ -7,16 +7,26 @@ import { useInstallerState } from '../../providers/InstallerProvider'
 const AnimatedDiv = animated.div
 
 function Screens() {
-  const { step } = useInstallerState()
-
   const [prevStep, setPrevStep] = useState(-1)
+  const { configurableApps, step } = useInstallerState()
+
+  const screens = useMemo(() => {
+    const skipConfiguration = configurableApps.length === 0
+
+    if (skipConfiguration) {
+      // IF there's no configuration needed, then we'll skip app configuration and review configuration screens
+      return [...InstallerScreens.slice(0, 3), ...InstallerScreens.slice(-1)]
+    }
+
+    return InstallerScreens
+  }, [configurableApps])
 
   useEffect(() => {
     setPrevStep(step)
   }, [step])
 
   const direction = step > prevStep ? 1 : -1
-  const { Screen, title } = InstallerScreens[step]
+  const { Screen, title } = screens[step]
 
   return (
     <Transition

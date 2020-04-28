@@ -1,7 +1,33 @@
 import isIPFS from 'is-ipfs'
+import { id } from 'ethers/utils'
+
+const DUMMY_ROLE = id('DUMMY_ROLE')
 const ANY_ENTITY = `0x${''.padEnd(40, 'f')}`
 
 export const IPFS_ENDPOINT = 'https://ipfs.eth.aragon.network/ipfs'
+
+const hasAppParamRef = (app, ref) =>
+  Array.isArray(ref) ? ref.includes(app.appName) : ref === app.appName
+
+const getPermissionAddressByRef = (daoApps, ref) => {
+  return ref === 'any'
+    ? ANY_ENTITY
+    : daoApps.find(app => hasAppParamRef(app, ref)).proxyAddress
+}
+
+const getPermissionRoleByRef = (roles, role) => {
+  return !role
+    ? DUMMY_ROLE
+    : roles.find(availableRole => availableRole.id === role).bytes
+}
+
+const getPermissionRoleByAppRef = (daoApps, role, ref) => {
+  return !role
+    ? DUMMY_ROLE
+    : daoApps
+        .find(app => hasAppParamRef(app, ref))
+        .roles.find(appRole => appRole.id === role).bytes
+}
 
 // Note that we can get inint params from both installed apps and settings screens
 export function parseInitParams(daoApps, appInitParams, settings) {
@@ -16,22 +42,7 @@ export function parseInitParams(daoApps, appInitParams, settings) {
     })
 }
 
-const hasAppParamRef = (app, ref) =>
-  Array.isArray(ref) ? ref.includes(app.appName) : ref === app.appName
-
-const getPermissionAddressByRef = (daoApps, ref) => {
-  return ref === 'any'
-    ? ANY_ENTITY
-    : daoApps.find(app => hasAppParamRef(app, ref)).proxyAddress
-}
-
-const getPermissionRoleByRef = (daoApps, role, ref) => {
-  return daoApps
-    .find(app => hasAppParamRef(app, ref))
-    .roles.find(appRole => appRole.id === role).bytes
-}
-
-export function parsePermissionIntents(
+export function buildPermissionIntents(
   daoApps,
   permissions,
   selectedAppRoles,
@@ -42,9 +53,7 @@ export function parsePermissionIntents(
 
   const createPermissionIntents = permissions.create.map(
     ({ entity, role, manager }) => {
-      const roleBytes = selectedAppRoles.find(
-        availableRole => availableRole.id === role
-      ).bytes
+      const roleBytes = getPermissionRoleByRef(selectedAppRoles, role)
 
       return [
         aclProxyAddress,
@@ -59,10 +68,14 @@ export function parsePermissionIntents(
     }
   )
 
+  if (!permissions.grant) {
+    return createPermissionIntents
+  }
+
   const grantPermissionIntents = permissions.grant.map(({ role, where }) => {
     const entity = counterfactualAppAddr
     const app = getPermissionAddressByRef(daoApps, where)
-    const roleBytes = getPermissionRoleByRef(daoApps, role, where)
+    const roleBytes = getPermissionRoleByAppRef(daoApps, role, where)
 
     return [aclProxyAddress, 'grantPermission', [entity, app, roleBytes]]
   })
@@ -76,7 +89,7 @@ export function validateDAO(daoApps, selectedApps) {
   let missingApp
 
   const ok = selectedApps
-    .map(app => app.appInitParams.filter(param => param.isApp))
+    .map(app => app.appInitParams?.filter(param => param.isApp) || [])
     .flat()
     .reduce((acc, param) => {
       const hasApp = daoApps.some(daoApp => hasAppParamRef(daoApp, param.ref))
