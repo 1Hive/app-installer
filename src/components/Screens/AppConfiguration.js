@@ -79,10 +79,7 @@ function AppConfiguration({ title }) {
         `}
       >
         {configurableApps.map(({ iconSrc, id }, index) => {
-          const { Screen } = AppConfigScreens.get(id) || {}
-
-          // There are apps which don't require configuration
-          if (!Screen) return null
+          const { Screen } = AppConfigScreens.get(id)
 
           //  TODO: Generalize component
           return (

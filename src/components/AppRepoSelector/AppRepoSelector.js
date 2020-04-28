@@ -9,11 +9,11 @@ import Header from '../Screens/Header'
 function AppSelector({ title }) {
   const {
     appRepos,
-    selectedAppRepos,
     daoApps,
     onBack,
     onNext,
     onSelectRepo,
+    selectedAppRepos,
   } = useInstallerState()
 
   const error = validateDAO(daoApps, selectedAppRepos)
