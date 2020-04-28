@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react'
 import { Accordion, AppBadge, GU, textStyle, useTheme } from '@aragon/ui'
-import { useInstallerState } from '../../providers/InstallerProvider'
-import Navigation from '../Navigation'
-import { AppConfigScreens } from './config'
-import Header from './Header'
+import { useInstallerState } from '../../../providers/InstallerProvider'
+import Navigation from '../../Navigation'
+import { AppConfigScreens } from '../config'
+import Header from '../Header'
 
-function ReviewScreen({ title }) {
+function ReviewConfiguration({ title }) {
   const theme = useTheme()
   const {
     appsConfig,
@@ -107,4 +107,4 @@ function ReviewScreen({ title }) {
   )
 }
 
-export default ReviewScreen
+export default ReviewConfiguration

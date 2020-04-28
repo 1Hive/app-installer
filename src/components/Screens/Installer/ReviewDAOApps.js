@@ -1,10 +1,10 @@
 import React from 'react'
 import { DataView, GU, LoadingRing } from '@aragon/ui'
-import { useInstallerState } from '../../providers/InstallerProvider'
-import Navigation from '../Navigation'
-import Header from '../Screens/Header'
+import { useInstallerState } from '../../../providers/InstallerProvider'
+import Navigation from '../../Navigation'
+import Header from '../Header'
 
-function DaoApps({ title }) {
+function ReviewDAOApps({ title }) {
   const { daoApps, loadingApps, onBack, onNext } = useInstallerState()
 
   return (
@@ -76,4 +76,4 @@ const Loading = ({ text }) => {
   )
 }
 
-export default DaoApps
+export default ReviewDAOApps

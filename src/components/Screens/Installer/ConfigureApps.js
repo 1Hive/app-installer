@@ -1,9 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { GU } from '@aragon/ui'
-import { AppConfigScreens } from './config'
-import { useInstallerState } from '../../providers/InstallerProvider'
-import { useScroll } from '../../providers/ScrollProvider'
-import Header from './Header'
+import AppScreen from '../Apps/AppScreen'
+import Header from '../Header'
+
+import { AppConfigScreens } from '../config'
+import { useInstallerState } from '../../../providers/InstallerProvider'
+import { useScroll } from '../../../providers/ScrollProvider'
 
 function AppConfiguration({ title }) {
   const {
@@ -81,9 +83,10 @@ function AppConfiguration({ title }) {
         {configurableApps.map(({ iconSrc, id }, index) => {
           const { Screen } = AppConfigScreens.get(id)
 
-          //  TODO: Generalize component
           return (
-            <Screen
+            <AppScreen
+              blurr={step !== index}
+              key={index}
               ref={
                 index === step + 1
                   ? nextRef
@@ -91,16 +94,17 @@ function AppConfiguration({ title }) {
                   ? prevRef
                   : null
               }
-              key={index}
-              blurr={step !== index}
-              data={screensData}
-              iconSrc={iconSrc}
-              screenProps={{
-                navigate: index === step,
-                onBack: handlePrevStep,
-                onNext: handleNextStep,
-              }}
-            />
+            >
+              <Screen
+                data={screensData}
+                iconSrc={iconSrc}
+                screenProps={{
+                  navigate: index === step,
+                  onBack: handlePrevStep,
+                  onNext: handleNextStep,
+                }}
+              />
+            </AppScreen>
           )
         })}
       </div>

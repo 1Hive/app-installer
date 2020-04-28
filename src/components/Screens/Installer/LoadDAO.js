@@ -1,18 +1,18 @@
 import React from 'react'
 import { Field, GU, Info, LoadingRing, TextInput, useTheme } from '@aragon/ui'
-import { useInstallerState } from '../../providers/InstallerProvider'
-import CheckDisc from '../CheckDisk'
-import Header from '../Screens/Header'
-import Navigation from '../Navigation'
+import { useInstallerState } from '../../../providers/InstallerProvider'
+import CheckDisc from '../../CheckDisk'
+import Header from '../Header'
+import Navigation from '../../Navigation'
 import {
   DOMAIN_CHECK,
   DOMAIN_ERROR,
   DOMAIN_LOADING,
   DOMAIN_NONE,
-} from '../../check-domain'
-import { ARAGON_DOMAIN } from '../../lib/web3-utils'
+} from '../../../check-domain'
+import { ARAGON_DOMAIN } from '../../../lib/web3-utils'
 
-function DaoLoader({ title }) {
+function LoadDAO({ title }) {
   const theme = useTheme()
   const {
     daoDomain,
@@ -96,4 +96,4 @@ function DaoLoader({ title }) {
   )
 }
 
-export default DaoLoader
+export default LoadDAO
