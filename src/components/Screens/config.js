@@ -1,22 +1,25 @@
 import React from 'react'
 import { addressesEqual, shortenAddress } from '@aragon/ui'
 
-import AppConfiguration from './AppConfiguration'
-import AppSelector from '../AppRepoSelector/AppRepoSelector'
-import DaoApps from '../Dao/DaoApps'
-import DaoLoader from '../Dao/DaoLoader'
-import Install from '../Installer/Install'
-import ReviewScreen from './Review'
-import RedemptionsScreen from './RedemptionsScreen'
-import TokenRequestScreen from './TokenRequestScreen'
+// Installer step screens
+import ConfigureApps from './Installer/ConfigureApps'
+import Install from './Installer/Install'
+import LoadDAO from './Installer/LoadDAO'
+import ReviewConfiguration from './Installer/ReviewConfiguration'
+import ReviewDAOApps from './Installer/ReviewDAOApps'
+import SelectRepos from './Installer/SelectRepos'
+
+// App screens
+import RedemptionsScreen from './Apps/RedemptionsScreen'
+import TokenRequestScreen from './Apps/TokenRequestScreen'
 import { ETHER_TOKEN_FAKE_ADDRESS } from '../../helpers/tokens'
 
 export const InstallerScreens = [
-  { Screen: DaoLoader, title: 'Load DAO' },
-  { Screen: DaoApps, title: 'Review apps' },
-  { Screen: AppSelector, title: 'Select repos' },
-  { Screen: AppConfiguration, title: 'Configure apps' },
-  { Screen: ReviewScreen, title: 'Review configuration' },
+  { Screen: LoadDAO, title: 'Load DAO' },
+  { Screen: ReviewDAOApps, title: 'Review apps' },
+  { Screen: SelectRepos, title: 'Select repos' },
+  { Screen: ConfigureApps, title: 'Configure apps' },
+  { Screen: ReviewConfiguration, title: 'Review configuration' },
   { Screen: Install, title: 'Install apps' },
 ]
 

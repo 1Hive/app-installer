@@ -1,12 +1,12 @@
 import React from 'react'
 import { GU, Info } from '@aragon/ui'
-import RepoCardGroup from './RepoCardGroup'
-import { useInstallerState } from '../../providers/InstallerProvider'
-import Navigation from '../Navigation'
-import { validateDAO } from '../../utils'
-import Header from '../Screens/Header'
+import RepoCardGroup from '../../AppRepoSelector/RepoCardGroup'
+import { useInstallerState } from '../../../providers/InstallerProvider'
+import Navigation from '../../Navigation'
+import { validateDAO } from '../../../utils'
+import Header from '../Header'
 
-function AppSelector({ title }) {
+function SelectRepos({ title }) {
   const {
     appRepos,
     daoApps,
@@ -53,4 +53,4 @@ function AppSelector({ title }) {
   )
 }
 
-export default AppSelector
+export default SelectRepos

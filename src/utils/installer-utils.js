@@ -10,16 +10,8 @@ import {
   buildNonceForAddress,
 } from '../lib/web3-utils'
 
+const INITIALIZE_REGEX = /initialize\(.*?\)/
 const newAppInstanceSignature = 'newAppInstance(bytes32,address,bytes,bool)'
-
-async function getInitPayload(daoApps, functions, appInitParams, settings) {
-  const appInitArgs = settings
-    ? parseInitParams(daoApps, appInitParams, settings)
-    : []
-
-  const appInit = functions.find(fn => fn.abi.name === 'initialize')
-  return encodeActCall(appInit.sig, appInitArgs)
-}
 
 export async function getInstallRawTx(
   daoAddress,
@@ -104,4 +96,13 @@ export async function getInstallRawTx(
     console.error(err)
     throw err
   }
+}
+
+async function getInitPayload(daoApps, functions, appInitParams, settings) {
+  const appInitArgs = settings
+    ? parseInitParams(daoApps, appInitParams, settings)
+    : []
+
+  const appInit = functions.find(fn => INITIALIZE_REGEX.test(fn.sig))
+  return encodeActCall(appInit.sig, appInitArgs)
 }

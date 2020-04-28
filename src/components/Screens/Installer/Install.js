@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button, GU } from '@aragon/ui'
-import ConfirmTransactionPath from './ConfirmTransaction'
-import TransactionStatus from './TransactionStatus'
-import { useWallet } from '../../providers/Wallet'
-import { useInstallerState } from '../../providers/InstallerProvider'
+import ConfirmTransactionPath from '../../Transaction/ConfirmTransaction'
+import TransactionStatus from '../../Transaction/TransactionStatus'
+import { useWallet } from '../../../providers/Wallet'
+import { useInstallerState } from '../../../providers/InstallerProvider'
 import {
   TX_STATUS_SIGNED,
   TX_STATUS_PENDING,
   TX_STATUS_CONFIRMED,
   TX_STATUS_SIGNATURE_FAILED,
   TX_STATUS_FAILED,
-} from './transaction-statuses'
-import Header from '../Screens/Header'
-import { buildDaoUrl } from '../../utils/utils'
+} from '../../Transaction/transaction-statuses'
+import Header from '../Header'
+import { buildDaoUrl } from '../../../utils/utils'
 
 const EMPTY_STATE = {
   signing: false,
