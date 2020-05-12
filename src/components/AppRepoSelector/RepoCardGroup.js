@@ -1,8 +1,19 @@
 import React from 'react'
 import { GU } from '@aragon/ui'
 import RepoCard from './RepoCard'
+import AppStoreApps from './AppStoreApps'
 
 function RepoCardGroup({ repos, onRepoSelected, selected }) {
+  if (repos) {
+    return (
+      <AppStoreApps
+        repos={repos}
+        onSelect={onRepoSelected}
+        selected={selected}
+      />
+    )
+  }
+
   return (
     <div
       css={`

@@ -27,10 +27,10 @@ function App() {
             >
               <div
                 css={`
+                  max-width: 50%;
                   position: relative;
-                  width: 50%;
-                  margin: 0 auto;
                   overflow: hidden;
+                  margin: 0 auto;
                 `}
               >
                 {account ? <Screens /> : <EnableAccount />}
