@@ -5,6 +5,7 @@ import { InstallerScreens } from './config'
 import { useInstallerState } from '../../providers/InstallerProvider'
 
 const AnimatedDiv = animated.div
+const DEFAULT_SCREEN_WIDTH = 500
 
 function Screens() {
   const [prevStep, setPrevStep] = useState(-1)
@@ -26,7 +27,7 @@ function Screens() {
   }, [step])
 
   const direction = step > prevStep ? 1 : -1
-  const { Screen, title } = screens[step]
+  const { Screen, title, width } = screens[step]
 
   return (
     <Transition
@@ -53,22 +54,33 @@ function Screens() {
       config={springs.smooth}
     >
       {({ Screen }) => ({ opacity, transform, position }) => (
-        <AnimatedDiv
-          style={{ opacity, transform, position }}
+        <div
           css={`
-            top: 0;
-            left: 0;
-            right: 0;
+            overflow: hidden;
+            position: relative;
+            width: ${width === 'full-width'
+              ? '100%'
+              : `${DEFAULT_SCREEN_WIDTH}px`};
+            max-width: 100%;
           `}
         >
-          <div
+          <AnimatedDiv
+            style={{ opacity, transform, position }}
             css={`
-              margin-bottom: ${2 * GU}px;
+              top: 0;
+              left: 0;
+              right: 0;
             `}
           >
-            <Screen title={title} />
-          </div>
-        </AnimatedDiv>
+            <div
+              css={`
+                margin-bottom: ${2 * GU}px;
+              `}
+            >
+              <Screen title={title} />
+            </div>
+          </AnimatedDiv>
+        </div>
       )}
     </Transition>
   )

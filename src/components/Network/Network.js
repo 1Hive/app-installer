@@ -3,7 +3,7 @@ import { DropDown, GU, useTheme } from '@aragon/ui'
 import { getAvailableNetworks } from '../../networks'
 import { getDefaultChain, setDefaultChain } from '../../local-settings'
 
-function Network() {
+function Network({ compact }) {
   const theme = useTheme()
   const chainId = getDefaultChain()
   const networks = getAvailableNetworks()
@@ -29,7 +29,11 @@ function Network() {
   )
 
   return (
-    <div>
+    <div
+      css={`
+        margin-left: ${1 * GU}px;
+      `}
+    >
       <DropDown
         items={networks.map(({ name, type }) => {
           const color = type === 'main' ? theme.positive : theme.yellow
@@ -50,7 +54,7 @@ function Network() {
                   margin-right: ${1 * GU}px;
                 `}
               />
-              <span>{name}</span>
+              {!compact && <span>{name}</span>}
             </div>
           )
         })}

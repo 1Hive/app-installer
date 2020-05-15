@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, GU, textStyle } from '@aragon/ui'
+import { Button, GU, textStyle, useViewport } from '@aragon/ui'
 import AccountModule from '../Account/AccountModule'
 import Network from '../Network/Network'
 import { useAppTheme } from '../../providers/ThemeProvider'
@@ -9,6 +9,8 @@ import moonDarkSvg from '../../assets/moon-dark.svg'
 
 function MainHeader() {
   const { appearance, toggleAppearance } = useAppTheme()
+  const { below } = useViewport()
+  const compactMode = below('medium')
 
   return (
     <header
@@ -16,13 +18,14 @@ function MainHeader() {
         padding: ${2 * GU}px ${4 * GU}px;
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        min-width: 390px;
       `}
     >
       <div>
         <h3
           css={`
             ${textStyle('title3')};
-            margin-bottom: ${2 * GU}px;
             font-weight: 200;
           `}
         >
@@ -35,8 +38,8 @@ function MainHeader() {
           align-items: center;
         `}
       >
-        <AccountModule />
-        <Network />
+        <AccountModule compact={compactMode} />
+        <Network compact={compactMode} />
         <Button
           icon={
             <img

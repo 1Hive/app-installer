@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
-import styled from 'styled-components'
-import { Button, GU, textStyle, useTheme } from '@aragon/ui'
+import { Button, GU, Tag, textStyle, useTheme } from '@aragon/ui'
 
 function AppStoreApp({ repo, onSelect, selected }) {
   const theme = useTheme()
@@ -10,36 +9,64 @@ function AppStoreApp({ repo, onSelect, selected }) {
   }, [onSelect, repo])
 
   return (
-    <Card
+    <div
       css={`
         background: ${theme.surface};
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid ${selected ? 'transparent' : theme.border};
+        box-shadow: ${selected ? '0px 0px 6px 0px rgba(0, 0, 0, 0.2)' : '0'};
+        transition: all 0.4s ease;
+        cursor: pointer;
+
+        &:hover > div:first-child {
+          transform: scale(1.1);
+        }
       `}
     >
       <div
         css={`
           background: url(${repo.iconSrc});
-          height: ${17 * GU}px;
+          height: ${19 * GU}px;
           background-repeat: no-repeat;
           background-size: cover;
           background-position: center;
+          ${selected && 'transform: scale(1.1);'}
+
+          transition: transform 0.4s ease;
         `}
       />
       <div
         css={`
           padding: ${3 * GU}px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          height: ${28 * GU}px;
+          height: ${29.5 * GU}px;
+          display: grid;
+          grid-template-rows: ${4 * GU}px auto ${6 * GU}px;
         `}
       >
-        <h2
+        <div
           css={`
-            ${textStyle('title4')};
+            display: flex;
+            align-items: center;
           `}
         >
-          {repo.name}
-        </h2>
+          <h2
+            css={`
+              ${textStyle('title4')};
+            `}
+          >
+            {repo.name}
+          </h2>
+          {repo.author && (
+            <Tag
+              css={`
+                margin-left: ${1 * GU}px;
+              `}
+            >
+              {repo.author}
+            </Tag>
+          )}
+        </div>
         <p
           css={`
             color: ${theme.contentSecondary};
@@ -49,7 +76,7 @@ function AppStoreApp({ repo, onSelect, selected }) {
           {repo.description}
         </p>
         <Button
-          label={selected ? 'Remove' : 'Add'}
+          label={selected ? 'Remove' : 'Select'}
           mode={selected ? 'negative' : 'normal'}
           onClick={handleAppSelected}
           wide
@@ -58,17 +85,8 @@ function AppStoreApp({ repo, onSelect, selected }) {
           `}
         />
       </div>
-    </Card>
+    </div>
   )
 }
-
-const Card = styled.div`
-  border-radius: 4px;
-  overflow: hidden;
-
-  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.2);
-  transition: all 0.4s ease;
-  cursor: pointer;
-`
 
 export default AppStoreApp

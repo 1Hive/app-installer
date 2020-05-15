@@ -7,8 +7,8 @@ function AppStoreApps({ repos, onSelect, selected }) {
     <div
       css={`
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        grid-gap: ${2 * GU}px;
+        grid-template-columns: repeat(auto-fit, minmax(267px, 1fr));
+        grid-gap: ${1.5 * GU}px;
         margin-bottom: ${2 * GU}px;
       `}
     >

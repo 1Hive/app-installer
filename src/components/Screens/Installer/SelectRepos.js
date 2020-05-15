@@ -1,10 +1,10 @@
 import React from 'react'
 import { GU, Info } from '@aragon/ui'
-import RepoCardGroup from '../../AppRepoSelector/RepoCardGroup'
 import { useInstallerState } from '../../../providers/InstallerProvider'
 import Navigation from '../../Navigation'
 import { validateDAO } from '../../../utils'
 import Header from '../Header'
+import AppStoreApps from '../../AppRepoSelector/AppStoreApps'
 
 function SelectRepos({ title }) {
   const {
@@ -26,13 +26,11 @@ function SelectRepos({ title }) {
           margin-bottom: ${3 * GU}px;
         `}
       >
-        <RepoCardGroup
+        <AppStoreApps
           repos={appRepos}
-          onRepoSelected={onSelectRepo}
+          onSelect={onSelectRepo}
           selected={selectedAppRepos}
-          selectable
         />
-        <Info>Select the apps you would like to install</Info>
       </div>
       {error && (
         <Info

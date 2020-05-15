@@ -11,6 +11,7 @@ function EnableAccount() {
         background: ${theme.background};
         padding: ${3.5 * GU}px ${10 * GU}px;
         text-align: center;
+        max-width: 650px;
       `}
     >
       <div
