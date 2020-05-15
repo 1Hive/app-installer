@@ -1,5 +1,6 @@
 import env from './environment'
 
+const APP_THEME = 'THEME'
 const DEFAULT_CHAIN_ID = 'CHAIN_ID'
 
 // Get a setting from localStorage
@@ -24,4 +25,24 @@ export function getDefaultChain() {
 
 export function setDefaultChain(chainId) {
   return setLocalSetting(DEFAULT_CHAIN_ID, chainId)
+}
+
+export function getAppTheme() {
+  const storedAppTheme = getLocalStorageSetting(APP_THEME)
+  if (storedAppTheme) {
+    try {
+      return JSON.parse(storedAppTheme)
+    } catch (err) {}
+  }
+  return {
+    // To be replaced by an “auto” state
+    appearance: window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light',
+    theme: null,
+  }
+}
+
+export function setAppTheme(appearance, theme = null) {
+  return setLocalSetting(APP_THEME, JSON.stringify({ appearance, theme }))
 }
