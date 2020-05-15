@@ -1,9 +1,12 @@
 import React from 'react'
+import { useTheme } from '@aragon/ui'
 
 const AppScreen = React.forwardRef(function AppScreen(
   { blurr, children },
   ref
 ) {
+  const theme = useTheme()
+
   return (
     <div
       ref={ref}
@@ -17,7 +20,7 @@ const AppScreen = React.forwardRef(function AppScreen(
           css={`
             position: absolute;
             opacity: 0.9;
-            background: #f9fafc;
+            background: ${theme.background};
             top: 0;
             bottom: 0;
             left: 0;

@@ -77,7 +77,9 @@ function AppConfiguration({ title }) {
       <Header title={title} />
       <div
         css={`
-          margin-bottom: ${3 * GU}px;
+          & > div {
+            margin-bottom: ${3 * GU}px;
+          }
         `}
       >
         {configurableApps.map(({ iconSrc, id }, index) => {
