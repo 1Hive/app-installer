@@ -52,6 +52,8 @@ function MainHeader() {
           css={`
             margin-left: ${1 * GU}px;
           `}
+          display="icon"
+          label="dark mode"
         />
       </div>
     </header>
