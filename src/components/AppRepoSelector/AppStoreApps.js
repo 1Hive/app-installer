@@ -1,8 +1,15 @@
 import React from 'react'
+import { animated, useTransition } from 'react-spring'
 import { GU } from '@aragon/ui'
 import AppStoreApp from './AppStoreApp'
 
 function AppStoreApps({ repos, onSelect, selected }) {
+  const transitions = useTransition(repos, (_, index) => index, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    trail: 100,
+  })
+
   return (
     <div
       css={`
@@ -12,15 +19,17 @@ function AppStoreApps({ repos, onSelect, selected }) {
         margin-bottom: ${2 * GU}px;
       `}
     >
-      {repos.map((repo, index) => {
-        const isSelected = selected?.some(elem => elem.appName === repo.appName)
+      {transitions.map(({ item, key, props }) => {
+        const isSelected = selected?.some(elem => elem.appName === item.appName)
+
         return (
-          <AppStoreApp
-            key={index}
-            onSelect={onSelect}
-            repo={repo}
-            selected={isSelected}
-          />
+          <animated.div key={key} style={props}>
+            <AppStoreApp
+              onSelect={onSelect}
+              repo={item}
+              selected={isSelected}
+            />
+          </animated.div>
         )
       })}
     </div>

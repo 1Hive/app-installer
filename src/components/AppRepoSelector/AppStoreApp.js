@@ -66,6 +66,15 @@ function AppStoreApp({ repo, onSelect, selected }) {
         <p
           css={`
             color: ${theme.contentSecondary};
+            line-height: ${22}px;
+            height: ${22 * 3}px; // 22px * 3 = line-height * 3 lines
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            hyphens: auto;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            overflow: hidden;
           `}
         >
           {repo.description}
@@ -85,14 +94,6 @@ function AppStoreApp({ repo, onSelect, selected }) {
             Manage permissions
           </span>
           <Switch onChange={() => {}} disabled />
-          <Tag
-            css={`
-              margin-left: ${1 * GU}px;
-            `}
-            mode="new"
-          >
-            Coming soon
-          </Tag>
         </div>
         <Button
           label={selected ? 'Remove' : 'Select'}

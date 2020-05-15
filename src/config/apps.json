@@ -65,5 +65,14 @@
         { "entity": "any", "role": "", "manager": "any" }
       ]
     }
+  },
+  {
+    "id": "agent",
+    "appName": "agent",
+    "permissions": {
+      "create": [
+        { "entity": "voting.aragonpm.eth", "role": "TRANSFER_ROLE", "manager": "voting.aragonpm.eth" }
+      ]
+    }
   }
 ]
