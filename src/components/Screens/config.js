@@ -17,7 +17,7 @@ import { ETHER_TOKEN_FAKE_ADDRESS } from '../../helpers/tokens'
 export const InstallerScreens = [
   { Screen: LoadDAO, title: 'Load DAO' },
   { Screen: ReviewDAOApps, title: 'Review apps' },
-  { Screen: SelectRepos, title: 'Select repos' },
+  { Screen: SelectRepos, title: 'Select repos', width: 'full-width' },
   { Screen: ConfigureApps, title: 'Configure apps' },
   { Screen: ReviewConfiguration, title: 'Review configuration' },
   { Screen: Install, title: 'Install apps' },

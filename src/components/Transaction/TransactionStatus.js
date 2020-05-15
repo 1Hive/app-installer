@@ -54,7 +54,6 @@ function TransactionStatus({ status }) {
         display: flex;
         flex-direction: column;
         align-items: center;
-        background: ${theme.feedbackSurface};
       `}
     >
       <div

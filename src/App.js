@@ -30,10 +30,9 @@ function App() {
             >
               <div
                 css={`
-                  position: relative;
-                  width: 50%;
-                  margin: 0 auto;
-                  overflow: hidden;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
                 `}
               >
                 {account ? <Screens /> : <EnableAccount />}

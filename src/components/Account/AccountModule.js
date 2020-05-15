@@ -1,13 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useWallet } from 'use-wallet'
-import {
-  Button,
-  GU,
-  IconConnect,
-  springs,
-  shortenAddress,
-  useViewport,
-} from '@aragon/ui'
+import { Button, GU, IconConnect, springs, shortenAddress } from '@aragon/ui'
 import { Transition, animated } from 'react-spring/renderprops'
 
 import ScreenError from './ScreenError'
@@ -45,7 +38,7 @@ const SCREENS = [
   },
 ]
 
-function AccountModule() {
+function AccountModule({ compact }) {
   const buttonRef = useRef()
   const wallet = useWallet()
   const [opened, setOpened] = useState(false)
@@ -53,9 +46,6 @@ function AccountModule() {
   const [activatingDelayed, setActivatingDelayed] = useState(false)
   const [activationError, setActivationError] = useState(null)
   const popoverFocusElement = useRef()
-
-  const { below } = useViewport()
-  const compactMode = below('medium')
 
   const { account, activating } = wallet
 
@@ -159,7 +149,6 @@ function AccountModule() {
         display: flex;
         align-items: center;
         justify-content: space-around;
-        width: ${compactMode ? 'auto' : `${24.5 * GU}px`};
         outline: 0;
       `}
     >
@@ -173,7 +162,7 @@ function AccountModule() {
           icon={<IconConnect />}
           label="Enable account"
           onClick={toggle}
-          display={compactMode ? 'icon' : 'all'}
+          display={compact ? 'icon' : 'all'}
         />
       )}
 
