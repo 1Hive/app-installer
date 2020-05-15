@@ -61,7 +61,6 @@ function Screens() {
             width: ${width === 'full-width'
               ? '100%'
               : `${DEFAULT_SCREEN_WIDTH}px`};
-            max-width: 100%;
           `}
         >
           <AnimatedDiv

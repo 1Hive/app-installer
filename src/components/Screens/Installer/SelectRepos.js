@@ -1,10 +1,10 @@
 import React from 'react'
 import { GU, Info } from '@aragon/ui'
-import { useInstallerState } from '../../../providers/InstallerProvider'
+import AppStoreApps from '../../AppRepoSelector/AppStoreApps'
+import Header from '../Header'
 import Navigation from '../../Navigation'
 import { validateDAO } from '../../../utils'
-import Header from '../Header'
-import AppStoreApps from '../../AppRepoSelector/AppStoreApps'
+import { useInstallerState } from '../../../providers/InstallerProvider'
 
 function SelectRepos({ title }) {
   const {
