@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Button, GU, Tag, textStyle, useTheme } from '@aragon/ui'
+import { Button, GU, Switch, Tag, textStyle, useTheme } from '@aragon/ui'
 
 function AppStoreApp({ repo, onSelect, selected }) {
   const theme = useTheme()
@@ -17,11 +17,6 @@ function AppStoreApp({ repo, onSelect, selected }) {
         border: 1px solid ${selected ? 'transparent' : theme.border};
         box-shadow: ${selected ? '0px 0px 6px 0px rgba(0, 0, 0, 0.2)' : '0'};
         transition: all 0.4s ease;
-        cursor: pointer;
-
-        &:hover > div:first-child {
-          transform: scale(1.1);
-        }
       `}
     >
       <div
@@ -39,9 +34,10 @@ function AppStoreApp({ repo, onSelect, selected }) {
       <div
         css={`
           padding: ${3 * GU}px;
-          height: ${29.5 * GU}px;
+          height: ${30 * GU}px;
           display: grid;
-          grid-template-rows: ${4 * GU}px auto ${6 * GU}px;
+          grid-template-rows: ${4 * GU}px auto ${4 * GU}px ${6 * GU}px;
+          grid-gap: ${0.5 * GU}px;
         `}
       >
         <div
@@ -70,11 +66,34 @@ function AppStoreApp({ repo, onSelect, selected }) {
         <p
           css={`
             color: ${theme.contentSecondary};
-            margin-top: ${1 * GU}px;
           `}
         >
           {repo.description}
         </p>
+
+        <div
+          css={`
+            display: flex;
+            align-items: center;
+          `}
+        >
+          <span
+            css={`
+              margin-right: ${1 * GU}px;
+            `}
+          >
+            Manage permissions
+          </span>
+          <Switch onChange={() => {}} disabled />
+          <Tag
+            css={`
+              margin-left: ${1 * GU}px;
+            `}
+            mode="new"
+          >
+            Coming soon
+          </Tag>
+        </div>
         <Button
           label={selected ? 'Remove' : 'Select'}
           mode={selected ? 'negative' : 'normal'}
