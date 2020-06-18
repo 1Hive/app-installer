@@ -1,5 +1,4 @@
 import { AbiItem } from 'web3-utils'
-
 import bareTemplateAbiSrc from './bareTemplateAbi.json'
 
 // JSON files are imported in this unique file until Typescript x JSON import issues are fixed
@@ -8,17 +7,19 @@ import bareTemplateAbiSrc from './bareTemplateAbi.json'
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+
+
 // From @aragon/abis/os
-export const kernelAbi: AbiItem[] = require('@aragon/abis/os/artifacts/Kernel')
+export const kernelAbi: typeof AbiItem[] = require('@aragon/abis/os/artifacts/Kernel')
   .abi
-export const aclAbi: AbiItem[] = require('@aragon/abis/os/artifacts/ACL').abi
-export const repoAbi: AbiItem[] = require('@aragon/abis/os/artifacts/Repo').abi
-export const aragonAppAbi: AbiItem[] = require('@aragon/abis/os/artifacts/AragonApp')
+export const aclAbi: typeof AbiItem[] = require('@aragon/abis/os/artifacts/ACL').abi
+export const repoAbi: typeof AbiItem[] = require('@aragon/abis/os/artifacts/Repo').abi
+export const aragonAppAbi: typeof AbiItem[] = require('@aragon/abis/os/artifacts/AragonApp')
   .abi
 
 // From @aragon/abis/id
-export const ififsResolvingRegistrarAbi: AbiItem[] = require('@aragon/abis/id/artifacts/IFIFSResolvingRegistrar')
+export const ififsResolvingRegistrarAbi: typeof AbiItem[] = require('@aragon/abis/id/artifacts/IFIFSResolvingRegistrar')
   .abi
 
 // From local JSON
-export const bareTemplateAbi: AbiItem[] = bareTemplateAbiSrc as AbiItem[]
+export const bareTemplateAbi: typeof AbiItem[] = bareTemplateAbiSrc as typeof AbiItem[]

@@ -26,10 +26,10 @@ export interface AragonArtifact extends AragonAppJson {
   functions: {
     roles: string[]
     notice: string
-    abi: AbiItem | undefined
+    abi: typeof AbiItem | undefined
   }[]
   environments: AragonEnvironments
-  abi: AbiItem[]
+  abi: typeof AbiItem[]
   path: string // 'contracts/Finance.sol'
   // Additional metadata for accountability
   flattenedCode: string
@@ -78,7 +78,7 @@ export interface AragonEnvironment {
  * App object returned by the aragon-js wrapper
  */
 export interface AragonApp {
-  abi: AbiItem[]
+  abi: typeof AbiItem[]
   name: string // 'Kernel'
   appName: string // 'kernel.aragonpm.eth'
   roles: any[]
