@@ -10,9 +10,14 @@ import ReviewDAOApps from './Installer/ReviewDAOApps'
 import SelectRepos from './Installer/SelectRepos'
 
 // App screens
+import DelayScreen from './Apps/DelayScreen'
 import RedemptionsScreen from './Apps/RedemptionsScreen'
 import TokenRequestScreen from './Apps/TokenRequestScreen'
 import { ETHER_TOKEN_FAKE_ADDRESS } from '../../helpers/tokens'
+import { formatDuration } from '../kit/utils'
+
+// For apps with no init params
+const NO_PARAMS = [['No params', <div />]]
 
 export const InstallerScreens = [
   { Screen: LoadDAO, title: 'Load DAO' },
@@ -95,21 +100,33 @@ export const AppConfigScreens = new Map([
     },
   ],
   [
+    'delay',
+    {
+      Screen: DelayScreen,
+      appLabel: 'Delay',
+      processData: data => data,
+      formatReviewFields: screenData => {
+        return [
+          [
+            'Execution delay',
+            <div>{formatDuration(screenData.executionDelay)}</div>,
+          ],
+        ]
+      },
+    },
+  ],
+  [
     'transactions',
     {
       appLabel: 'Transactions',
-      formatReviewFields: () => {
-        return [['No params', <div />]]
-      },
+      formatReviewFields: () => NO_PARAMS,
     },
   ],
   [
     'agent',
     {
       appLabel: 'Agent',
-      formatReviewFields: () => {
-        return [['No params', <div />]]
-      },
+      formatReviewFields: () => NO_PARAMS,
     },
   ],
 ])

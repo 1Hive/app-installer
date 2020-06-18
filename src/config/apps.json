@@ -2,8 +2,9 @@
   {
     "id": "redemptions",
     "appName": "redemptions",
-    "appInitParams": [{
-      "position": 1,
+    "appInitParams": [
+      {
+        "position": 1,
         "isApp": true,
         "ref": ["vault.aragonpm.eth", "agent.aragonpm.eth"]
       },
@@ -31,29 +32,44 @@
   {
     "id": "token-request",
     "appName": "token-request",
-    "appInitParams": [{
-      "position": 1,
-      "isApp": true,
-      "ref": "token-manager.aragonpm.eth" 
-    },
-    {
-      "position": 2,
-      "isApp": true,
-      "ref": ["vault.aragonpm.eth", "agent.aragonpm.eth"]
-    }, 
-    {
-      "position": 3,
-      "ref": "acceptedTokens",
-      "prop": "address",
-      "sort": true
-    }
-  ],
+    "appInitParams": [
+      {
+        "position": 1,
+        "isApp": true,
+        "ref": "token-manager.aragonpm.eth" 
+      },
+      { 
+        "position": 2,
+        "isApp": true,
+        "ref": ["vault.aragonpm.eth", "agent.aragonpm.eth"]
+      }, 
+      {
+        "position": 3,
+        "ref": "acceptedTokens",
+        "prop": "address",
+        "sort": true
+      }
+    ],
     "permissions": {
       "create": [
         { "entity": "voting.aragonpm.eth", "role": "FINALISE_TOKEN_REQUEST_ROLE", "manager": "voting.aragonpm.eth" }
       ],
       "grant": [
         { "where": "token-manager.aragonpm.eth", "role": "MINT_ROLE" }
+      ]
+    }
+  },
+  {
+    "id": "delay",
+    "appName": "delay",
+    "appInitParams": [
+      {
+        "ref": "executionDelay"
+      }
+    ],
+    "permissions": {
+      "create": [
+        { "entity": "any", "role": "SET_DELAY_ROLE", "manager": "voting.aragonpm.eth" }
       ]
     }
   },
