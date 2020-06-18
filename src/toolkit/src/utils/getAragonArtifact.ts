@@ -1,7 +1,7 @@
 import { mapValues } from 'lodash'
 import { AragonAppJson, AragonArtifact } from '../types'
-import { keccak256, AbiItem } from 'web3-utils'
 import { AragonContractFunction } from './parseContractFunctions'
+import { keccak256, AbiItem } from 'web3-utils'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const namehash = require('eth-ens-namehash')
@@ -9,7 +9,7 @@ const namehash = require('eth-ens-namehash')
 export function getAragonArtifact(
   arapp: AragonAppJson,
   functions: AragonContractFunction[],
-  abi: AbiItem[]
+  abi: typeof AbiItem[]
 ): AragonArtifact {
   return {
     ...arapp,

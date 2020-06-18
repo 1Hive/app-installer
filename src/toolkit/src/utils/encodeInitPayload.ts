@@ -5,7 +5,7 @@ import { AbiItem } from 'web3-utils'
 const web3EthAbi: AbiCoder = web3EthAbiUntyped as any
 
 export function encodeInitPayload(
-  contractAbi: AbiItem[],
+  contractAbi: typeof AbiItem[],
   initFunctionName: string,
   initArgs: any[]
 ): string {
@@ -17,7 +17,7 @@ export function encodeInitPayload(
     try {
       // parse array parameters from string inputs
       if (methodABI.inputs)
-        methodABI.inputs.forEach((input, i) => {
+        methodABI.inputs.forEach((input: any, i: number) => {
           if (input.type.includes('[')) {
             initArgs[i] = JSON.parse(
               initArgs[i].replace(new RegExp("'", 'g'), '"')
