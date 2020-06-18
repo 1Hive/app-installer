@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import { Button, GU, Switch, Tag, textStyle, useTheme } from '@aragon/ui'
+import getAppHeader from './headers'
 
 function AppStoreApp({ repo, onSelect, selected }) {
   const theme = useTheme()
@@ -7,6 +8,8 @@ function AppStoreApp({ repo, onSelect, selected }) {
   const handleAppSelected = useCallback(() => {
     onSelect(repo)
   }, [onSelect, repo])
+
+  const headerSrc = getAppHeader(repo.id) || repo.iconSrc
 
   return (
     <div
@@ -21,7 +24,7 @@ function AppStoreApp({ repo, onSelect, selected }) {
     >
       <div
         css={`
-          background: url(${repo.iconSrc});
+          background: url(${headerSrc});
           height: ${19 * GU}px;
           background-repeat: no-repeat;
           background-size: cover;
