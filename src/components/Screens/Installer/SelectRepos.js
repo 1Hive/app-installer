@@ -21,9 +21,14 @@ function SelectRepos({ title }) {
   return (
     <div>
       <Header title={title} />
+      <Navigation
+        nextEnabled={!error && Boolean(selectedAppRepos.length)}
+        onBack={onBack}
+        onNext={onNext}
+      />
       <div
         css={`
-          margin-bottom: ${3 * GU}px;
+          margin: ${3 * GU}px 0;
         `}
       >
         <AppStoreApps
