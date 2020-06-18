@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { AppBadge, Box, Field, GU, Help, Info } from '@aragon/ui'
-import MultiTokenSelector from '../../TokenSelector/MultiTokenSelector'
+import MultiTokenSelector from '../../kit/TokenSelector/MultiTokenSelector'
 import { getDefaultTokens } from '../../../helpers/tokens'
 import useTokens from '../hooks/useTokens'
 import Navigation from '../../Navigation'
