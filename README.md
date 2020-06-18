@@ -4,7 +4,13 @@ Basic UI to enable users to install apps to their DAO in an easily accessible wa
 
 <a href="https://installer.1hive.org"><img src="docs/assets/screenshot.png" /></a>
 
-**Currently available apps:** [Redemptions](https://github.com/1Hive/redemptions-app), [Token Request](https://github.com/1Hive/token-request-app), [Transactions](https://github.com/1Hive/transactions-app/) [Agent](https://github.com/aragon/aragon-apps/tree/master/apps/agent)
+**Currently available apps:** 
+
+- [Redemptions](https://github.com/1Hive/redemptions-app)  
+- [Token Request](https://github.com/1Hive/token-request-app) 
+- [Delay](https://github.com/1Hive/delay-app) 
+- [Transactions](https://github.com/1Hive/transactions-app/) 
+- [Agent](https://github.com/aragon/aragon-apps/tree/master/apps/agent)
 
 :soon: Permission management
 
