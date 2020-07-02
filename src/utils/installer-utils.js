@@ -10,6 +10,7 @@ import {
   buildNonceForAddress,
 } from '../lib/web3-utils'
 
+const INITIALIZE_NO_PARAMS = 'initialize()'
 const INITIALIZE_REGEX = /initialize\(.*?\)/
 const newAppInstanceSignature = 'newAppInstance(bytes32,address,bytes,bool)'
 
@@ -104,5 +105,5 @@ async function getInitPayload(daoApps, functions, appInitParams, settings) {
     : []
 
   const appInit = functions.find(fn => INITIALIZE_REGEX.test(fn.sig))
-  return encodeActCall(appInit.sig, appInitArgs)
+  return encodeActCall(appInit?.sig || INITIALIZE_NO_PARAMS, appInitArgs)
 }
