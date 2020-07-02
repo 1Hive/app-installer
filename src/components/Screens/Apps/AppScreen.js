@@ -25,6 +25,7 @@ const AppScreen = React.forwardRef(function AppScreen(
             bottom: 0;
             left: 0;
             right: 0;
+            z-index: 1;
           `}
         />
       )}

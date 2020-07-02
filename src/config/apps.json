@@ -15,8 +15,7 @@
       },
       {
         "position": 3,
-        "ref": "redeemableTokens",
-        "prop": "address"
+        "ref": "redeemableTokens"
       }
     ],
     "permissions": { 
@@ -46,7 +45,6 @@
       {
         "position": 3,
         "ref": "acceptedTokens",
-        "prop": "address",
         "sort": true
       }
     ],
@@ -56,6 +54,51 @@
       ],
       "grant": [
         { "where": "token-manager.aragonpm.eth", "role": "MINT_ROLE" }
+      ]
+    }
+  },
+  {
+    "id": "payroll",
+    "appName": "better-payroll.open.aragonpm.eth",
+    "appInitParams": [
+      {
+        "position": 1,
+        "isApp": true,
+        "ref": "finance.aragonpm.eth" 
+      },
+      { 
+        "position": 2,
+        "ref": "denominationToken"
+      }, 
+      {
+        "position": 3,
+        "isApp": true,
+        "ref": "token-manager.aragonpm.eth" 
+      },
+      {
+        "position": 4,
+        "ref": "equityMultiplier" 
+      },
+      {
+        "position": 5,
+        "ref": "vestingLength" 
+      },
+      {
+        "position": 6,
+        "ref": "vestingCliffLength" 
+      },
+      {
+        "position": 7,
+        "ref": "vestingRevokable" 
+      }
+    ],
+    "permissions": {
+      "create": [
+        { "entity": "voting.aragonpm.eth", "role": "ADD_EMPLOYEE_ROLE", "manager": "voting.aragonpm.eth" }
+      ],
+      "grant": [
+        { "where": "token-manager.aragonpm.eth", "role": "MINT_ROLE" },
+        { "where": "finance.aragonpm.eth", "role": "CREATE_PAYMENTS_ROLE" }
       ]
     }
   },

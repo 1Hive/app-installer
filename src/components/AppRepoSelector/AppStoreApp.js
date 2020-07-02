@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Button, GU, Switch, Tag, textStyle, useTheme } from '@aragon/ui'
+import { Button, GU, Tag, textStyle, useTheme } from '@aragon/ui'
 import getAppHeader from './headers'
 
 function AppStoreApp({ repo, onSelect, selected }) {
@@ -25,7 +25,7 @@ function AppStoreApp({ repo, onSelect, selected }) {
       <div
         css={`
           background: url(${headerSrc});
-          height: ${19 * GU}px;
+          height: ${15 * GU}px;
           background-repeat: no-repeat;
           background-size: cover;
           background-position: center;
@@ -37,9 +37,9 @@ function AppStoreApp({ repo, onSelect, selected }) {
       <div
         css={`
           padding: ${3 * GU}px;
-          height: ${30 * GU}px;
+          height: ${25 * GU}px;
           display: grid;
-          grid-template-rows: ${4 * GU}px auto ${4 * GU}px ${6 * GU}px;
+          grid-template-rows: ${4 * GU}px auto ${6 * GU}px;
           grid-gap: ${0.5 * GU}px;
         `}
       >
@@ -83,7 +83,7 @@ function AppStoreApp({ repo, onSelect, selected }) {
           {repo.description}
         </p>
 
-        <div
+        {/* <div
           css={`
             display: flex;
             align-items: center;
@@ -97,7 +97,7 @@ function AppStoreApp({ repo, onSelect, selected }) {
             Manage permissions
           </span>
           <Switch onChange={() => {}} disabled />
-        </div>
+        </div> */}
         <Button
           label={selected ? 'Remove' : 'Select'}
           mode={selected ? 'negative' : 'normal'}

@@ -35,7 +35,8 @@ function AppConfiguration({ title }) {
 
     // Scroll to prev screen
     if (prevRef.current) {
-      scrollTo(prevRef.current)
+      const { height, top } = prevRef.current.getBoundingClientRect()
+      scrollTo(top + height / 2)
     }
 
     setStep(step => step - 1)
@@ -53,8 +54,8 @@ function AppConfiguration({ title }) {
 
       // Scroll to next screen
       if (nextRef.current) {
-        const { offsetTop, offsetHeight } = nextRef.current
-        scrollTo(offsetTop + offsetHeight)
+        const { top, height } = nextRef.current.getBoundingClientRect()
+        scrollTo(top + height / 2)
       }
 
       // Go to next app configuration screen
