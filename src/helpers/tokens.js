@@ -21,6 +21,10 @@ export function getDefaultTokens() {
   return [ETHER_TOKEN, DAI_TOKEN]
 }
 
+export function getDefaultToken() {
+  return DAI_TOKEN
+}
+
 export function getDaiTokenAddress() {
   if (getNetworkType() === 'mainnet') {
     return DAI_MAINNET_TOKEN_ADDRESS
