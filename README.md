@@ -28,10 +28,10 @@ cd app-installer
 
 3. Install dependencies
 ```
-npm install
+yarn install
 ```
 
 4. Start installer 
 ```
-npm start
+yarn start
 ```
