@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Field, GU, Info, LoadingRing, TextInput, useTheme } from '@aragon/ui'
 import { useInstallerState } from '../../../providers/InstallerProvider'
 import CheckDisc from '../../CheckDisk'
@@ -20,6 +20,14 @@ function LoadDAO({ title }) {
     onNext,
     onUpdateDaoDomain,
   } = useInstallerState()
+
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (inputRef.current) {
+      setTimeout(() => inputRef.current.focus(), 1500)
+    }
+  }, [])
 
   return (
     <div>
@@ -56,6 +64,7 @@ function LoadDAO({ title }) {
               </div>
             }
             adornmentPosition="end"
+            ref={inputRef}
           />
         </Field>
         {domainStatus !== DOMAIN_NONE && (

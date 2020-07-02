@@ -60,7 +60,7 @@ function Screens() {
             position: relative;
             width: ${width === 'full-width'
               ? '100%'
-              : `${DEFAULT_SCREEN_WIDTH}px`};
+              : `${width || DEFAULT_SCREEN_WIDTH}px`};
           `}
         >
           <AnimatedDiv

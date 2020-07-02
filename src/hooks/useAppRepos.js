@@ -19,8 +19,8 @@ function useAppRepos() {
       }
 
       const tempRepos = []
-      try {
-        for (let index = 0; index < apps.length; index++) {
+      for (let index = 0; index < apps.length; index++) {
+        try {
           const app = apps[index]
           const repo = await getApmRepo(
             app.appName,
@@ -29,13 +29,12 @@ function useAppRepos() {
             ethers
           )
           tempRepos.push({ ...repo, ...app })
+        } catch (err) {
+          console.error('Error fetching repo', err)
         }
-
-        if (!cancelled) {
-          setRepos(tempRepos)
-        }
-      } catch (err) {
-        console.error('Error fetching repos', err)
+      }
+      if (!cancelled) {
+        setRepos(tempRepos)
       }
     }
 

@@ -29,7 +29,14 @@ function MainHeader() {
             font-weight: 200;
           `}
         >
-          App installer
+          <a
+            css={`
+              text-decoration: none;
+            `}
+            href="/"
+          >
+            App installer
+          </a>
         </h3>
       </div>
       <div

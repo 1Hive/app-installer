@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Button, GU } from '@aragon/ui'
+import { Button, GU, Info } from '@aragon/ui'
 import ConfirmTransactionPath from '../../Transaction/ConfirmTransaction'
 import TransactionStatus from '../../Transaction/TransactionStatus'
 import { useWallet } from '../../../providers/Wallet'
@@ -119,14 +119,25 @@ function Install({ title }) {
           <div
             css={`
               margin-top: ${2 * GU}px;
+              text-align: center;
             `}
           >
             {status === TX_STATUS_CONFIRMED && (
-              <Button
-                href={buildDaoUrl(daoDomain)}
-                label="Open DAO"
-                mode="strong"
-              />
+              <>
+                <Button
+                  href={buildDaoUrl(daoDomain)}
+                  label="Open DAO"
+                  mode="strong"
+                />
+                <Info
+                  css={`
+                    margin-top: ${2 * GU}px;
+                  `}
+                >
+                  A vote should have been created in your DAO. Head over to the
+                  Voting app to finalize the installation process.
+                </Info>
+              </>
             )}
             {(status === TX_STATUS_FAILED ||
               status === TX_STATUS_SIGNATURE_FAILED) && (
