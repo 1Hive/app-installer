@@ -8,6 +8,7 @@ Basic UI to enable users to install apps to their DAO in an easily accessible wa
 
 - [Redemptions](https://github.com/1Hive/redemptions-app)  
 - [Token Request](https://github.com/1Hive/token-request-app) 
+- [Payroll](https://github.com/1Hive/payroll-app)
 - [Delay](https://github.com/1Hive/delay-app) 
 - [Transactions](https://github.com/1Hive/transactions-app/) 
 - [Agent](https://github.com/aragon/aragon-apps/tree/master/apps/agent)
