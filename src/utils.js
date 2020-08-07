@@ -32,7 +32,7 @@ const getPermissionRoleByAppRef = (daoApps, role, ref) => {
 // Note that we can get inint params from both installed apps and settings screens
 export function parseInitParams(daoApps, appInitParams, settings) {
   return appInitParams
-    .sort((p1, p2) => p1.position < p2.position)
+    .sort((p1, p2) => p1.position - p2.position)
     .map(param => {
       if (param.isApp) {
         return daoApps.find(app => hasAppParamRef(app, param.ref)).proxyAddress
