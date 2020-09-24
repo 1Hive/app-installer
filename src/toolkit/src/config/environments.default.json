@@ -9,7 +9,7 @@
     "network": "rinkeby"
   },
   "xdai": {
-    "gasPrice": "15000000001",
+    "gasPrice": "2000000001",
     "registry": "0xaafca6b0c89521752e559650206d7c925fd0e530",
     "network": "xdai"
   },
