@@ -1,7 +1,7 @@
 [
   {
     "id": "redemptions",
-    "appName": "redemptions",
+    "appNames": ["redemptions"],
     "appInitParams": [
       {
         "position": 1,
@@ -30,7 +30,7 @@
   },
   {
     "id": "token-request",
-    "appName": "token-request",
+    "appNames": ["token-request"],
     "appInitParams": [
       {
         "position": 1,
@@ -59,7 +59,7 @@
   },
   {
     "id": "payroll",
-    "appName": "better-payroll.open.aragonpm.eth",
+    "appNames": ["better-payroll.open.aragonpm.eth", "payroll.aragonpm.eth"],
     "appInitParams": [
       {
         "position": 1,
@@ -104,7 +104,7 @@
   },
   {
     "id": "delay",
-    "appName": "delay",
+    "appNames": ["delay"],
     "appInitParams": [
       {
         "ref": "executionDelay"
@@ -118,7 +118,7 @@
   },
   {
     "id": "transactions",
-    "appName": "transactions.open.aragonpm.eth",
+    "appNames": ["transactions.open.aragonpm.eth", "transactions.aragonpm.eth"],
     "permissions": {
       "create": [
         { "entity": "any", "role": "", "manager": "any" }
@@ -127,7 +127,7 @@
   },
   {
     "id": "agent",
-    "appName": "agent",
+    "appNames": ["agent"],
     "permissions": {
       "create": [
         { "entity": "voting.aragonpm.eth", "role": "TRANSFER_ROLE", "manager": "voting.aragonpm.eth" }

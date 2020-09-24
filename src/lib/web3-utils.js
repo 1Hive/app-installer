@@ -1,6 +1,7 @@
 import env from '../environment'
 import { keccak256, RLP } from 'ethers/utils'
 import { getDefaultChain } from '../local-settings'
+import { isAddress } from '../toolkit/src/apm/utils'
 
 export const ARAGON_DOMAIN = 'aragonid.eth'
 export const DEFAULT_LOCAL_CHAIN = ''
@@ -40,6 +41,7 @@ export function getNetworkType(chainId = getDefaultChain()) {
   if (chainId === '1') return 'mainnet'
   if (chainId === '3') return 'ropsten'
   if (chainId === '4') return 'rinkeby'
+  if (chainId === '100') return 'xdai'
 
   return DEFAULT_LOCAL_CHAIN
 }
@@ -50,6 +52,7 @@ export function getNetworkName(chainId = getDefaultChain()) {
   if (chainId === '1') return 'Mainnet'
   if (chainId === '3') return 'Ropsten'
   if (chainId === '4') return 'Rinkeby'
+  if (chainId === '100') return 'xDai'
 
   return 'unknown'
 }
@@ -70,6 +73,9 @@ export async function resolveEnsDomain(domain, provider) {
 }
 
 export async function resolveDaoAddressOrEnsDomain(dao, provider) {
+  if (isAddress(dao)) {
+    return dao
+  }
   return resolveEnsDomain(convertDAOIdToSubdomain(dao), provider)
 }
 

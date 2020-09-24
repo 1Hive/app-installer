@@ -25,7 +25,12 @@ function LoadDAO({ title }) {
 
   useEffect(() => {
     if (inputRef.current) {
-      setTimeout(() => inputRef.current.focus(), 1500)
+      setTimeout(() => {
+        // Component could have been unmounted on timeout
+        if (inputRef.current) {
+          inputRef.current.focus()
+        }
+      }, 1500)
     }
   }, [])
 
