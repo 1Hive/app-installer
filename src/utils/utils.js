@@ -1,12 +1,19 @@
 import BN from 'bn.js'
-import { getNetworkType } from '../lib/web3-utils'
+import { getNetwork } from '../networks'
 
 export const SECONDS_IN_A_MONTH = 2628000
 const PCT_BASE = new BN('1000000000000000000')
 
 export function buildDaoUrl(daoDomain) {
-  const network = getNetworkType()
-  return `https://${network}.aragon.org/#/${daoDomain}`
+  const network = getNetwork()
+
+  const url =
+    network.clientUrl ||
+    `https://${
+      network.type === 'main' ? '' : network.type
+    }.client.aragon.org/#/`
+
+  return `${url}${daoDomain}`
 }
 
 export function monthsToSeconds(months) {
