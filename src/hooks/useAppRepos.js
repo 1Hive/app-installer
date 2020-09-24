@@ -22,12 +22,36 @@ function useAppRepos() {
       for (let index = 0; index < apps.length; index++) {
         try {
           const app = apps[index]
-          const repo = await getApmRepo(
-            app.appName,
-            'latest',
-            getNetworkType(),
-            ethers
-          )
+
+          let repo
+
+          // If there are multiple published apps, find the first one.
+          // TODO: Support installing of all different versions.
+          if (Array.isArray(app.appName)) {
+            for (const appName of app.appName) {
+              try {
+                repo = await getApmRepo(
+                  appName,
+                  'latest',
+                  getNetworkType(),
+                  ethers
+                )
+              } catch (err) {
+                console.log(`Repo for ${appName} not found`)
+              }
+            }
+            if (!repo) {
+              throw new Error('Could not find repo for any of ', app.appName)
+            }
+          } else {
+            repo = await getApmRepo(
+              app.appName,
+              'latest',
+              getNetworkType(),
+              ethers
+            )
+          }
+
           tempRepos.push({ ...repo, ...app })
         } catch (err) {
           console.error('Error fetching repo', err)

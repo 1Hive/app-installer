@@ -59,7 +59,7 @@
   },
   {
     "id": "payroll",
-    "appName": "better-payroll.open.aragonpm.eth",
+    "appName": ["better-payroll.open.aragonpm.eth", "payroll.aragonpm.eth"],
     "appInitParams": [
       {
         "position": 1,
@@ -118,7 +118,7 @@
   },
   {
     "id": "transactions",
-    "appName": "transactions.open.aragonpm.eth",
+    "appName": ["transactions.open.aragonpm.eth", "transactions.aragonpm.eth"],
     "permissions": {
       "create": [
         { "entity": "any", "role": "", "manager": "any" }
