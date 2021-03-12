@@ -72,7 +72,7 @@
     "husky": "^4.2.5",
     "prettier": "^1.19.1",
     "react-app-rewired": "^2.1.5",
-    "react-dev-utils": "^10.2.1",
+    "react-dev-utils": "^11.0.4",
     "subscriptions-transport-ws": "^0.9.16"
   }
 }
