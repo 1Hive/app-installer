@@ -21,6 +21,13 @@ const networks = {
     type: 'xdai',
     clientUrl: 'https://aragon.1hive.org/#/',
   },
+  polygon: {
+    chainId: 137,
+    ensRegistry: '0x7EdE100965B1E870d726cD480dD41F2af1Ca0130',
+    name: 'Polygon',
+    type: 'matic',
+    clientUrl: 'https://aragon.1hive.org/#/',
+  },
 }
 
 function getNetworkInternalName(chainId) {

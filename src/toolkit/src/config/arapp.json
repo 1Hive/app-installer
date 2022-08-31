@@ -14,6 +14,11 @@
       "wsRPC": "wss://rpc.xdaichain.com/wss",
       "network": "xdai"
     },
+    "matic": {
+      "registry": "0x7EdE100965B1E870d726cD480dD41F2af1Ca0130",
+      "wsRPC": "wss://rpc-mainnet.matic.network",
+      "network": "matic"
+    },    
     "rinkeby": {
       "registry": "0x98df287b6c145399aaa709692c8d308357bc085d",
       "wsRPC": "wss://rinkeby.eth.aragon.network/ws",
